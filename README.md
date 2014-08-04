@@ -17,8 +17,8 @@ Note that it's using use-network=false and expects therefore to open locally via
 
 **TO-DO:**
 
-~~1. No reliance on classic flash shapes, rather use starling shapes~~
-~~2. No need to bundle whole book as TextureAtlas- just pass textures~~
+1. ~~No reliance on classic flash shapes, rather use starling shapes~~
+2. ~~No need to bundle whole book as TextureAtlas- just pass textures~~
 3. Soft mode can pull from top or sides
 4. English comments
 
