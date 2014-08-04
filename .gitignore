@@ -3,7 +3,7 @@ bin/
 bin-debug/
 # bin-release/
 html-template/
-src/runtime
+# src/runtime
 
 # Other files and folders
 .settings/
