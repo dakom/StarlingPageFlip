@@ -16,49 +16,56 @@ package pf
 	import starling.textures.TextureAtlas;
 
 	/**
-	 * 基于Starling的翻页组件
-	 * @author shaorui
+	 *
+	 * @original-author shaorui
+	 * 
 	 */	
 	public class PageFlipContainer extends Sprite
 	{
-		/**包含内页的图集*/
-		private var altas:TextureAtlas;
-		/**书的宽度*/
+		
+		
+		private var cacheImage:Image;
+		
+		private var flipImage:ImagePage;
+		
+		private var textures:Vector.<Texture>;
+		
+		private var isDraging:Boolean = false;
+		
 		private var bookWidth:Number;
-		/**书的高度*/
+		
 		private var bookHeight:Number;
-		/**书的总页数*/
-		private var bookCount:Number;
-		/**批处理显示*/
+		
+		private var pageCount:Number;
+		
 		private var quadBatch:QuadBatch;
-		/**左侧显示页面页码*/
+		
 		private var leftPageNum:int = -1;
-		/**右侧显示页面页码*/
+		
 		private var rightPageNum:int = 0;
-		/**翻动中的页面编码(正面，反面为+1)*/
+		
 		private var flipingPageNum:int = -1;
-		/**X正在翻页的位置(-1到1)，由程序控制，外部无须调用*/
+		
 		public var flipingPageLocationX:Number = -1;
-		/**Y正在翻页的位置(-1到1)，由程序控制，外部无须调用*/
+		
 		public var flipingPageLocationY:Number = -1;
-		/**X启动翻页的位置(-1到1)，由程序控制，外部无须调用*/
+		
 		public var begainPageLocationX:Number = -1;
-		/**Y启动翻页的位置(-1到1)，由程序控制，外部无须调用*/
+		
 		public var begainPageLocationY:Number = -1;
-		/**是否需要更新*/
+		
 		private var needUpdate:Boolean = true;
 		
 		private var debugGraphics:Graphics;
 		private var debugShape:Shape;
 		
-		/**@private*/
-		public function PageFlipContainer(altas:TextureAtlas,bookWidth:Number,bookHeight:Number,bookCount:Number)
+		public function PageFlipContainer(_textures:Vector.<Texture>, _bookWidth:Number, _bookHeight:Number, _bookCount:Number)
 		{
 			super();
-			this.altas = altas;
-			this.bookWidth = bookWidth;
-			this.bookHeight = bookHeight;
-			this.bookCount = bookCount;
+			this.textures = _textures;
+			this.bookWidth = _bookWidth;
+			this.bookHeight = _bookHeight;
+			this.pageCount = _textures.length;
 			
 			
 			debugShape = new Shape();
@@ -67,57 +74,56 @@ package pf
 			
 			initPage();
 		}
-		/**初始化页*/
+		
 		private function initPage():void
 		{
 			quadBatch = new QuadBatch();
 			addChild(quadBatch);
-			textures = altas.getTextures();
+			
 			cacheImage = new Image(textures[0]);
 			flipImage = new ImagePage(textures[0], debugGraphics);
 			addEventListener(Event.ENTER_FRAME,enterFrameHandler);
 			addEventListener(Event.ADDED_TO_STAGE,firstFrameInit);
 			addEventListener(TouchEvent.TOUCH,onTouchHandler);
 		}
-		/**显示的时候初始化第一个画面*/
+		
 		private function firstFrameInit():void
 		{
 			removeEventListener(Event.ADDED_TO_STAGE,firstFrameInit);
 			enterFrameHandler();
 			needUpdate = false;
 		}
-		/**用于缓存纹理的图片*/
-		private var cacheImage:Image;
-		/**翻动的图片*/
-		private var flipImage:ImagePage;
-		/**缓存的纹理数组*/
-		private var textures:Vector.<Texture>;
-		/**每帧调用*/
+		
+		
+		
 		private function enterFrameHandler(event:Event=null):void
 		{
-			if(stage == null || !needUpdate)
+			if(stage == null || !needUpdate) {
 				return;
+			}
+			
 			quadBatch.reset();
+			
 			if(flipingPageNum >= 0)
 			{
 				leftPageNum = flipingPageNum - 1;
 				rightPageNum = flipingPageNum + 2;
 			}
-			//选择左侧的页面
+			
 			if(validatePageNumber(leftPageNum))
 			{
 				cacheImage.x = 0;
 				cacheImage.texture = textures[leftPageNum];
 				quadBatch.addImage(cacheImage);
 			}
-			//渲染右侧的页面
+			
 			if(validatePageNumber(rightPageNum))
 			{
 				cacheImage.x = bookWidth/2;
 				cacheImage.texture = textures[rightPageNum];
 				quadBatch.addImage(cacheImage);
 			}
-			//渲染正在翻转的页面
+			
 			if(validatePageNumber(flipingPageNum))
 			{
 				if(flipImage.softMode)
@@ -136,9 +142,9 @@ package pf
 				}
 			}
 		}
-		/**是否处于拖动状态*/
-		private var isDraging:Boolean = false;
-		/**触碰处理*/
+		
+		
+		
 		private function onTouchHandler(event:TouchEvent):void
 		{
 			var touch:Touch = event.getTouch(this);
@@ -205,15 +211,15 @@ package pf
 				needUpdate = false;
 			}
 		}
-		/**设置硬皮还是软皮*/
+		
 		private function resetSoftMode():void
 		{
-			if(flipingPageNum > 0 && flipingPageNum < (bookCount-2))
+			if(flipingPageNum > 0 && flipingPageNum < (pageCount-2))
 				flipImage.softMode = true;
 			else
 				flipImage.softMode = false;
 		}
-		/**触控结束后，完成翻页过程*/
+		
 		private function finishTouchByMotion(endX:Number):void
 		{
 			var imgWidth:Number = bookWidth/2;
@@ -248,7 +254,7 @@ package pf
 				}
 			}
 		}
-		/**动画执行完毕后的重置*/
+		
 		private function tweenCompleteHandler():void
 		{
 			if(flipingPageLocationX == 1)
@@ -267,15 +273,15 @@ package pf
 			touchable = true;
 			debugGraphics.clear();
 		}
-		/**验证某个页面是否合法*/
+		
 		private function validatePageNumber(pageNum:int):Boolean
 		{
-			if(pageNum >= 0 && pageNum < bookCount)
+			if(pageNum >= 0 && pageNum < pageCount)
 				return true;
 			else
 				return false;
 		}
-		/**当前页码*/
+		
 		public function get pageNumber():int
 		{
 			if(leftPageNum >= 0)
@@ -283,26 +289,26 @@ package pf
 			else
 				return rightPageNum;
 		}
-		/**强制更新一次显示*/
+		
 		public function validateNow():void
 		{
 			needUpdate = true;
 			enterFrameHandler();
 			needUpdate = false;
 		}
-		/**跳页*/
+		
 		public function gotoPage(pn:int):void
 		{
 			if(pn < 0)
 				pn = 0;
-			if(pn >= bookCount)
-				pn = bookCount-1;
+			if(pn >= pageCount)
+				pn = pageCount-1;
 			if(pn == 0)
 			{
 				leftPageNum = -1;
 				rightPageNum = 0;
 			}
-			else if(pn == bookCount-1)
+			else if(pn == pageCount-1)
 			{
 				leftPageNum = pn;
 				rightPageNum = -1;

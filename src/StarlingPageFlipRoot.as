@@ -58,7 +58,7 @@ package
 		private function showPageFlip() {
 			var atlas:TextureAtlas = new TextureAtlas(Texture.fromBitmap((loaderMax.getLoader('atlas-img') as ImageLoader).rawContent), (loaderMax.getLoader('atlas-xml') as XMLLoader).content);
 			
-			pageFlipContainer = new PageFlipContainer(atlas,800,480,8);
+			pageFlipContainer = new PageFlipContainer(atlas.getTextures(),800,480,8);
 			pageFlipContainer.x = 100;
 			pageFlipContainer.y = 100;
 			addChild(pageFlipContainer);
