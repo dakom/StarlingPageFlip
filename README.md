@@ -25,4 +25,4 @@ Starling-Graphics extension (source in src folder)
 
 5) English comments
 
-Will update here as it's worked on
+_Will update here as it's worked on_
