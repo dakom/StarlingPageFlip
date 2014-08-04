@@ -1,6 +1,4 @@
-import com.jewishinteractive.apps.jibook.appcommon.pf;
-
-package com.jewishinteractive.apps.jibook.appcommon.pf
+package pf
 {
 	import flash.display.Bitmap;
 	import flash.geom.Point;

@@ -1,7 +1,8 @@
 # Build and Release Folders
 bin/
 bin-debug/
-bin-release/
+# bin-release/
+html-template/
 
 # Other files and folders
 .settings/

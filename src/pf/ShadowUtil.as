@@ -1,4 +1,4 @@
-package com.jewishinteractive.apps.jibook.appcommon.pf
+package pf
 {
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
@@ -7,7 +7,7 @@ package com.jewishinteractive.apps.jibook.appcommon.pf
 
 	public class ShadowUtil
 	{
-		[Embed(source="Y:\\UMBRELLA\\JEWISHINTERACTIVE\\Dropbox (Jewish Interactive)\\JIBook\\COMPILETIME\\pf-high-light.png")]
+		[Embed(source="../../assets/compiletime/pf-high-light.png")]
 		private static const shadowImgClass:Class;
 		
 		public static function addShadow(bookImgs:Bitmap,xml:XML):void
