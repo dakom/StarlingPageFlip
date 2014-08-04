@@ -1,18 +1,16 @@
 StarlingPageFlip
 ================
 
-Some Starling demos: Page Flip, 3D Cloud, Image Wrapper
+This is a fork of NeoGuo's pageflip, with a few new goals (work-in-progress):
 
-这里整理了一下之前做过的基于Starling的3个例子的源码，包括：
+TO-DO:
 
-1. 翻书效果，和你看到很多Flash翻书效果是一致的，换成Starling方式来实现
+1) No reliance on classic flash shapes, rather use starling shapes
 
-![github](https://github.com/NeoGuo/StarlingPageFlip/blob/master/demo_page_flip.png?raw=true "github")  
+2) Images/Textures can be applied at runtime
 
-2. 3D穿云过雾效果，体验一下孙悟空的感觉
+3) No need to bundle whole book as TextureAtlas.
 
-![github](https://github.com/NeoGuo/StarlingPageFlip/blob/master/demo_3d_cloud.png?raw=true "github")  
+4) Soft mode can pull from top or sides
 
-3. 广告切换，软件中常用
-
-![github](https://github.com/NeoGuo/StarlingPageFlip/blob/master/demo_image_wrapper.png?raw=true "github")  
+Will update here as it's worked on

@@ -1,9 +1,10 @@
-package test.pf
+package com.jewishinteractive.apps.jibook.appcommon.pf
 {
 	import flash.display.Graphics;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	
+	import starling.display.Graphics;
 	import starling.display.Image;
 	import starling.display.QuadBatch;
 	import starling.display.Sprite;
@@ -57,10 +58,14 @@ package test.pf
 		/**软皮翻页的时候，显示另一面纹理*/
 		public var anotherTexture:Texture;
 		
+		private var debugGraphics:starling.display.Graphics;
+		
 		/**@private*/
-		public function ImagePage(texture:Texture)
+		public function ImagePage(texture:Texture, _debugGraphics:starling.display.Graphics)
 		{
 			super(texture);
+			
+			debugGraphics = _debugGraphics;
 		}
 		/**@override*/
 		override public function readjustSize():void
@@ -391,7 +396,7 @@ package test.pf
 		/**测试用*/
 		private function drawPage(point1:Point , point2:Point , point3:Point , point4:Point):void
 		{
-			var g:Graphics = Main.instance.debugShape.graphics;
+			var g:starling.display.Graphics = debugGraphics;
 			g.clear();
 			if(_k1 != 0)//当_k1=0且_dragPoint接近targetPoint时说明页面完全翻过
 			{

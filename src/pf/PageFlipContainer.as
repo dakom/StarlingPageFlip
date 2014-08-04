@@ -1,10 +1,14 @@
-package test.pf
+import com.jewishinteractive.apps.jibook.appcommon.pf;
+
+package com.jewishinteractive.apps.jibook.appcommon.pf
 {
 	import flash.display.Bitmap;
 	import flash.geom.Point;
 	
+	import starling.display.Graphics;
 	import starling.display.Image;
 	import starling.display.QuadBatch;
+	import starling.display.Shape;
 	import starling.display.Sprite;
 	import starling.events.Event;
 	import starling.events.Touch;
@@ -46,6 +50,9 @@ package test.pf
 		/**是否需要更新*/
 		private var needUpdate:Boolean = true;
 		
+		private var debugGraphics:Graphics;
+		private var debugShape:Shape;
+		
 		/**@private*/
 		public function PageFlipContainer(altas:TextureAtlas,bookWidth:Number,bookHeight:Number,bookCount:Number)
 		{
@@ -54,6 +61,12 @@ package test.pf
 			this.bookWidth = bookWidth;
 			this.bookHeight = bookHeight;
 			this.bookCount = bookCount;
+			
+			
+			debugShape = new Shape();
+			
+			this.debugGraphics = debugShape.graphics;
+			
 			initPage();
 		}
 		/**初始化页*/
@@ -63,7 +76,7 @@ package test.pf
 			addChild(quadBatch);
 			textures = altas.getTextures();
 			cacheImage = new Image(textures[0]);
-			flipImage = new ImagePage(textures[0]);
+			flipImage = new ImagePage(textures[0], debugGraphics);
 			addEventListener(Event.ENTER_FRAME,enterFrameHandler);
 			addEventListener(Event.ADDED_TO_STAGE,firstFrameInit);
 			addEventListener(TouchEvent.TOUCH,onTouchHandler);
@@ -254,7 +267,7 @@ package test.pf
 			resetSoftMode();
 			validateNow();
 			touchable = true;
-			Main.instance.debugShape.graphics.clear();
+			debugGraphics.clear();
 		}
 		/**验证某个页面是否合法*/
 		private function validatePageNumber(pageNum:int):Boolean

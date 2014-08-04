@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
-<application xmlns="http://ns.adobe.com/air/application/3.5">
+<application xmlns="http://ns.adobe.com/air/application/13.0">
 
 <!-- Adobe AIR Application Descriptor File Template.
 
@@ -15,19 +15,19 @@
 
 	<!-- A universally unique application identifier. Must be unique across all AIR applications.
 	Using a reverse DNS-style name as the id is recommended. (Eg. com.example.ExampleApplication.) Required. -->
-	<id>com.test.ImageWrapper</id>
+	<id>StarlingPageFlip</id>
 
 	<!-- Used as the filename for the application. Required. -->
-	<filename>ImageWrapper</filename>
+	<filename>StarlingPageFlip</filename>
 
 	<!-- The name that is displayed in the AIR application installer. 
 	May have multiple values for each language. See samples or xsd schema file. Optional. -->
-	<name>ImageWrapper</name>
+	<name>StarlingPageFlip</name>
 	
 	<!-- A string value of the format <0-999>.<0-999>.<0-999> that represents application version which can be used to check for application upgrade. 
 	Values can also be 1-part or 2-part. It is not necessary to have a 3-part value.
 	An updated version of application must have a versionNumber value higher than the previous version. Required for namespace >= 2.5 . -->
-	<versionNumber>0.0.0</versionNumber>
+	<versionNumber>0.1.0</versionNumber>
 		         
 	<!-- A string value (such as "v1", "2.5", or "Alpha 1") that represents the version of the application, as it should be shown to users. Optional. -->
 	<!-- <versionLabel></versionLabel> -->
@@ -46,7 +46,7 @@
 	<initialWindow>
 		<!-- The main SWF or HTML file of the application. Required. -->
 		<!-- Note: In Flash Builder, the SWF reference is set automatically. -->
-		<content>[此值将由 Flash Builder 在输出 app.xml 中覆盖]</content>
+		<content>[This value will be overwritten by Flash Builder in the output app.xml]</content>
 		
 		<!-- The title of the main window. Optional. -->
 		<!-- <title></title> -->
@@ -89,7 +89,7 @@
 
         <!-- The aspect ratio of the app ("portrait" or "landscape" or "any"). Optional. Mobile only. Default is the natural orientation of the device -->
 
-        <aspectRatio>landscape</aspectRatio>
+        <!-- <aspectRatio></aspectRatio> -->
 
         <!-- Whether the app will begin auto-orienting on launch. Optional. Mobile only. Default false -->
 
@@ -101,7 +101,7 @@
 
         <!-- The render mode for the app (either auto, cpu, gpu, or direct). Optional. Default auto -->
 
-        <renderMode>direct</renderMode>
+        <!-- <renderMode></renderMode> -->
 
         <!-- Whether the default direct mode rendering context allocates storage for depth and stencil buffers.  Optional.  Default false. -->
         <!-- <depthAndStencil></depthAndStencil> -->
@@ -109,9 +109,14 @@
 		<!-- Whether or not to pan when a soft keyboard is raised or lowered (either "pan" or "none").  Optional.  Defaults "pan." -->
 		<!-- <softKeyboardBehavior></softKeyboardBehavior> -->
 
-	<autoOrients>false</autoOrients>
-        <fullScreen>false</fullScreen>
-        <visible>false</visible>
+		<!-- Display Resolution for the app (either "standard" or "high"). Optional, OSX-only. Default "standard" -->
+		<!-- <requestedDisplayResolution></requestedDisplayResolution> -->
+	<renderMode>direct</renderMode>
+		<depthAndStencil>true</depthAndStencil>
+	<autoOrients>true</autoOrients>
+	<aspectRatio>landscape</aspectRatio>
+        <fullScreen>true</fullScreen>
+        <visible>true</visible>
     </initialWindow>
 
 	<!-- We recommend omitting the supportedProfiles element, -->
@@ -133,24 +138,31 @@
 
 	<!-- The icon the system uses for the application. For at least one resolution,
 	specify the path to a PNG file included in the AIR package. Optional. -->
-	<!-- <icon>
-		<image16x16></image16x16>
-		<image29x29></image29x29>
-		<image32x32></image32x32>
-		<image36x36></image36x36>
-		<image48x48></image48x48>
-		<image50x50></image50x50>
-		<image57x57></image57x57>
-		<image58x58></image58x58>
-		<image72x72></image72x72>
-		<image100x100></image100x100>
-		<image114x114></image114x114>
-		<image128x128></image128x128>
-		<image144x144></image144x144>
-		<image512x512></image512x512>
-		<image1024x1024></image1024x1024>
-	</icon> -->
-
+	<!--  
+	<icon>
+		<image16x16>icons/icon-16.png</image16x16>
+		<image29x29>icons/icon-29.png</image29x29>
+		<image32x32>icons/icon-32.png</image32x32>
+		<image36x36>icons/icon-36.png</image36x36>
+		<image40x40>icons/icon-40.png</image40x40>
+		<image48x48>icons/icon-48.png</image48x48>
+		<image50x50>icons/icon-50.png</image50x50>
+		<image57x57>icons/icon-57.png</image57x57>
+		<image58x58>icons/icon-58.png</image58x58>
+		<image72x72>icons/icon-72.png</image72x72>
+		<image76x76>icons/icon-76.png</image76x76>
+		<image80x80>icons/icon-80.png</image80x80>
+		<image96x96>icons/icon-96.png</image96x96>
+		<image100x100>icons/icon-100.png</image100x100>
+		<image114x114>icons/icon-114.png</image114x114>
+		<image120x120>icons/icon-120.png</image120x120>
+		<image128x128>icons/icon-128.png</image128x128>
+		<image144x144>icons/icon-144.png</image144x144>
+		<image152x152>icons/icon-152.png</image152x152>
+		<image512x512>icons/icon-512.png</image512x512>
+		<image1024x1024>icons/icon-1024.png</image1024x1024>
+	</icon>
+	-->
 	<!-- Whether the application handles the update when a user double-clicks an update version
 	of the AIR file (true), or the default AIR application installer handles the update (false).
 	Optional. Default false. -->
@@ -217,6 +229,12 @@
         </Entitlements> -->
 	<!-- Display Resolution for the app (either "standard" or "high"). Optional. Default "standard" -->
 	<!-- <requestedDisplayResolution></requestedDisplayResolution> -->
+	<!-- Forcing Render Mode CPU for the devices mentioned. Optional  -->
+	<!-- <forceCPURenderModeForDevices></forceCPURenderModeForDevices> -->
+	<!-- File containing line separated list of external swf paths. These swfs won't be 
+	packaged inside the application and corresponding stripped swfs will be output in 
+	externalStrippedSwfs folder. -->
+	<!-- <externalSwfs></externalSwfs> -->
 	<!-- </iPhone> -->
 
 	<!-- Specify Android specific tags that get passed to AndroidManifest.xml file. -->
@@ -241,6 +259,8 @@
         </manifestAdditions> -->
 	    <!-- Color depth for the app (either "32bit" or "16bit"). Optional. Default 16bit before namespace 3.0, 32bit after -->
         <!-- <colorDepth></colorDepth> -->
+        <!-- Indicates if the app contains video or not. Necessary for ordering of video planes with graphics plane, especially in Jellybean - if you app does video this must be set to true - valid values are true or false -->
+        <!-- <containsVideo></containsVideo> -->
     <!-- </android> -->
 	<!-- End of the schema for adding the android specific tags in AndroidManifest.xml file -->
 
@@ -248,21 +268,27 @@
         <manifestAdditions><![CDATA[
 			<manifest android:installLocation="auto">
 			    <!--See the Adobe AIR documentation for more information about setting Google Android permissions-->
-			    <!--删除 android.permission.INTERNET 权限将导致无法调试设备上的应用程序-->
-			    <uses-permission android:name="android.permission.INTERNET"/>
-			    <!--<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>-->
+			    <!--Removing the permission android.permission.INTERNET will have the side effect
+		of preventing you from debugging your application on your device-->
+			    
 			    <!--<uses-permission android:name="android.permission.READ_PHONE_STATE"/>-->
 			    <!--<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>-->
-			    <!--应同时切换 DISABLE_KEYGUARD 和 WAKE_LOCK 权限，才能访问 AIR
-					的 SystemIdleMode API-->
+			    <!--The DISABLE_KEYGUARD and WAKE_LOCK permissions should be toggled together
+		in order to access AIR's SystemIdleMode APIs-->
 			    <!--<uses-permission android:name="android.permission.DISABLE_KEYGUARD"/>-->
 			    <!--<uses-permission android:name="android.permission.WAKE_LOCK"/>-->
 			    <!--<uses-permission android:name="android.permission.CAMERA"/>-->
 			    <!--<uses-permission android:name="android.permission.RECORD_AUDIO"/>-->
-			    <!--应同时切换 ACCESS_NETWORK_STATE 和 ACCESS_WIFI_STATE 权限，才能使用 AIR
-					的 NetworkInfo API-->
+			    <!--The ACCESS_NETWORK_STATE and ACCESS_WIFI_STATE permissions should be toggled
+		together in order to use AIR's NetworkInfo APIs-->
 			    <!--<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>-->
 			    <!--<uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>-->
+			    
+			    <uses-permission android:name="android.permission.INTERNET"/>
+			    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+			    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+			    <uses-permission android:name="android.permission.CAMERA"/>
+			    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
 			</manifest>
 			
 		]]></manifestAdditions>
@@ -274,7 +300,11 @@
 				<string>1</string>
 				<string>2</string>
 			</array>
+			<key>UIPrerenderedIcon</key> 
+        	<true/> 
 		]]></InfoAdditions>
         <requestedDisplayResolution>high</requestedDisplayResolution>
     </iPhone>
+
+
 </application>
