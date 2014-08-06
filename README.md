@@ -21,9 +21,9 @@ Runtime images are in assets/runtime (not bin-release)
 
 
 1. Dynamic Images (Remove need for TextureAtlas)
---* Ditch QuadBatch for cached pages
---* Use multiple QuadBatch's for soft pages
---* ShadowUtil operates on series of bitmaps instead of TextureAtlas
+  * Ditch QuadBatch for cached pages
+  * Use multiple QuadBatch's for soft pages
+  * ShadowUtil operates on series of bitmaps instead of TextureAtlas
 2. Pre-cache images (not necessarily better performance, depends on use case, but also necessary to allow for showing non-current images)
 3. Keep old pages visible on stage- to for layering and seeing underneath, esp. useful with different shaped pages/covers
 4. No reliance on classic flash shapes, rather use starling shapes (performance increase probably)
@@ -35,7 +35,7 @@ Runtime images are in assets/runtime (not bin-release)
 3. External shadows, more 3d look (could simply use Starling DropShadow filter?)
 4. Make gotoPage fan through with animation
 5. More fluidity for custom sizes
---* Internal Shadows should be created at runtime
+  * Internal Shadows should be created at runtime
 6. Internal Shadows should mask by alpha channel of page
 
 _Will update here as it's worked on_
