@@ -10,7 +10,28 @@ package pf
 		[Embed(source="../../assets/compiletime/pf-high-light.png")]
 		private static const shadowImgClass:Class;
 		
-		public static function addShadow(bookImgs:Bitmap,xml:XML):void
+		public static function addShadowsToBMPs(bmps:Array) {
+			var bmp:Bitmap;
+			var count:int = 0;
+			var shadowData:BitmapData = (new shadowImgClass() as Bitmap).bitmapData;
+			var rect:Rectangle;
+			var point:Point;
+			
+			for(count = 1; count < bmps.length-1; count++) {
+				bmp = bmps[count];
+				
+				if(count%2==0) {
+					rect = new Rectangle(shadowData.width/2,0,shadowData.width/2,shadowData.height);
+					point = new Point();
+				} else {
+					rect = new Rectangle(0,0,shadowData.width/2,shadowData.height);
+					point = new Point(bmp.width-shadowData.width/2,0);
+				}
+				
+				bmp.bitmapData.copyPixels(shadowData,rect,point,null,null,true);
+			}
+		}
+		public static function addShadowsToAtlas(bookImgs:Bitmap,xml:XML):void
 		{
 			var sourceData:BitmapData = bookImgs.bitmapData;
 			var shadowData:BitmapData = (new shadowImgClass() as Bitmap).bitmapData;

@@ -2,6 +2,7 @@ package pf
 {
 	import flash.display.Bitmap;
 	import flash.geom.Point;
+	import flash.utils.Dictionary;
 	
 	import starling.display.Graphics;
 	import starling.display.Image;
@@ -23,10 +24,10 @@ package pf
 	public class PageFlipContainer extends Sprite
 	{
 		
+		private var cachedImagesLeft:CachedImages;
+		private var cachedImagesRight:CachedImages;
 		
-		private var cacheImage:Image;
-		
-		private var flipImage:ImagePage;
+		private var flipImage:PageFlipImage;
 		
 		private var textures:Vector.<Texture>;
 		
@@ -37,8 +38,6 @@ package pf
 		private var bookHeight:Number;
 		
 		private var pageCount:Number;
-		
-		private var quadBatch:QuadBatch;
 		
 		private var leftPageNum:int = -1;
 		
@@ -59,6 +58,8 @@ package pf
 		private var debugGraphics:Graphics;
 		private var debugShape:Shape;
 		
+		private var softContainer:SoftContainer = null;
+		
 		public function PageFlipContainer(_textures:Vector.<Texture>, _bookWidth:Number, _bookHeight:Number, _bookCount:Number)
 		{
 			super();
@@ -77,18 +78,27 @@ package pf
 		
 		private function initPage():void
 		{
-			quadBatch = new QuadBatch();
-			addChild(quadBatch);
 			
-			cacheImage = new Image(textures[0]);
-			flipImage = new ImagePage(textures[0], debugGraphics);
+			cachedImagesLeft = new CachedImages(false, textures);
+			cachedImagesRight = new CachedImages(true, textures);
+			cachedImagesRight.x = bookWidth/2;
+			
+			addChild(cachedImagesLeft);
+			addChild(cachedImagesRight);
+			
+			flipImage = new PageFlipImage(textures[0], debugGraphics);
 			addEventListener(Event.ENTER_FRAME,enterFrameHandler);
 			addEventListener(Event.ADDED_TO_STAGE,firstFrameInit);
 			addEventListener(TouchEvent.TOUCH,onTouchHandler);
+			
+			
 		}
 		
 		private function firstFrameInit():void
 		{
+			
+			
+			
 			removeEventListener(Event.ADDED_TO_STAGE,firstFrameInit);
 			enterFrameHandler();
 			needUpdate = false;
@@ -102,7 +112,6 @@ package pf
 				return;
 			}
 			
-			quadBatch.reset();
 			
 			if(flipingPageNum >= 0)
 			{
@@ -112,33 +121,50 @@ package pf
 			
 			if(validatePageNumber(leftPageNum))
 			{
-				cacheImage.x = 0;
-				cacheImage.texture = textures[leftPageNum];
-				quadBatch.addImage(cacheImage);
+				cachedImagesLeft.showImage(leftPageNum);
+			} else {
+				cachedImagesLeft.nullify();
 			}
 			
 			if(validatePageNumber(rightPageNum))
 			{
-				cacheImage.x = bookWidth/2;
-				cacheImage.texture = textures[rightPageNum];
-				quadBatch.addImage(cacheImage);
+				cachedImagesRight.showImage(rightPageNum);
+			}  else {
+				cachedImagesRight.nullify();
 			}
 			
 			if(validatePageNumber(flipingPageNum))
 			{
 				if(flipImage.softMode)
 				{
+					
+					if(softContainer == null) {
+						softContainer = new SoftContainer();
+						addChild(softContainer);
+					} else {
+						softContainer.resetQuads();
+					}
+					
+					//setChildIndex(softContainer, numChildren);
 					flipImage.texture = begainPageLocationX>=0?textures[flipingPageNum]:textures[flipingPageNum+1];
 					flipImage.anotherTexture = begainPageLocationX<0?textures[flipingPageNum]:textures[flipingPageNum+1];
 					flipImage.readjustSize();
-					flipImage.setLocationSoft(quadBatch,begainPageLocationX,begainPageLocationY,flipingPageLocationX,flipingPageLocationY);
+					flipImage.setLocationSoft(softContainer,begainPageLocationX,begainPageLocationY,flipingPageLocationX,flipingPageLocationY);
 				}
 				else
 				{
 					flipImage.texture = flipingPageLocationX>=0?textures[flipingPageNum]:textures[flipingPageNum+1];
 					flipImage.readjustSize();
 					flipImage.setLocation(flipingPageLocationX);
-					quadBatch.addImage(flipImage);
+					addChild(flipImage);	
+				}
+				
+				
+			} else {
+				if(softContainer != null) {
+					softContainer.dispose();
+					removeChild(softContainer);
+					softContainer = null;
 				}
 			}
 		}
