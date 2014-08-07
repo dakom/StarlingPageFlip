@@ -1,8 +1,13 @@
 StarlingPageFlip
 ================
 
-This is a fork of NeoGuo's pageflip, with a few new goals (work-in-progress).
-The basic idea is to sacrifice some performance but gain new features
+This is a fork of NeoGuo's Starling-powered pageflipper, with a few new features and goals (work-in-progress).
+
+The basic idea is to sacrifice some significant performance but gain some significant new features :)
+
+If all you need is to pop in a texture atlas and flip through the book at a predefined size and not see hidden pages till uncovered- use NeoGuo's version, it is faster for that
+
+If, on the other hand, you need the "New Features" here (see below), this is a great starting point imho.
 
 **DEMO:**
 
@@ -31,12 +36,18 @@ Runtime images are in assets/runtime (not bin-release)
 
 **TO-DO:**
 
-1. Soft mode should allow pulling from top or sides, not just bottom corner <-- could really use some help on this :)
+1. Soft mode should allow pulling from top or sides, not just bottom corner <-- _could really use some help on this_ :)
 2. Allow non-current pages to fan out, more 3d look (partially done since they are now in BG)
 3. External shadows, more 3d look (could simply use Starling DropShadow filter?)
 4. Make gotoPage fan through with animation
 5. More fluidity for custom sizes
-
+6. Build decoupled navigation system for testing <-- _current task_
+  * ~~create visual buttons and listeners~~
+  * Setup events processing from book->main->navigation
+    * Need to get page number - at init, move, or end of flip?
+  * Setup events processing from navigation->main->book
+    * Need to set page number of book
+  
 **EXTRAS:**
 
 1. When screen size changes, classic flash handles underlying BG while starling scales to fit proportionally

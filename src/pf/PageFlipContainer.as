@@ -60,14 +60,24 @@ package pf
 		
 		private var softContainer:SoftContainer = null;
 		
-		public function PageFlipContainer(_textures:Vector.<Texture>, _bookWidth:Number, _bookHeight:Number, _bookCount:Number)
+		public function PageFlipContainer(bmps:Array, _bookWidth:Number, _bookHeight:Number)
 		{
+			var bmp:Bitmap;
+			var texture:Texture;
+			
 			super();
-			this.textures = _textures;
+			
 			this.bookWidth = _bookWidth;
 			this.bookHeight = _bookHeight;
-			this.pageCount = _textures.length;
+			this.pageCount = bmps.length;
 			
+			ShadowUtil.addShadowsToBMPs(bmps, bookWidth, bookHeight);
+			this.textures = new Vector.<Texture>();
+			
+			for each(bmp in bmps) {
+				texture = Texture.fromBitmap(bmp);	
+				textures.push(texture);
+			}
 			
 			debugShape = new Shape();
 			

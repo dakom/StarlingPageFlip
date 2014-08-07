@@ -10,6 +10,8 @@ package
 	
 	import flash.display.Bitmap;
 	
+	import nav.NavigationContainer;
+	
 	import pf.PageFlipContainer;
 	import pf.ShadowUtil;
 	
@@ -21,11 +23,13 @@ package
 	public class StarlingPageFlipRoot extends Sprite
 	{
 		
-		
+		private static const bookWidth:Number = 800;
+		private static const bookHeight:Number = 480;
 		
 		private var loaderMax:LoaderMax;
 		
 		private var pageFlipContainer:PageFlipContainer;
+		private var navigationContainer:NavigationContainer;
 		
 		private var images:Array = [	'StartCover_Front',
 										'StartCover_Back',
@@ -82,26 +86,23 @@ package
 			var textures:Vector.<Texture> = new Vector.<Texture>();
 			var texture:Texture;
 			var bmp:Bitmap;
-			var originalBitmaps:Array = new Array();
-			var pageWidth:Number = 800;
-			var pageHeight:Number = 480;
-			var pageCount:Number = 8;
+			var bmps:Array = new Array();
+			
 			
 			for each(imgName in images) {
-				originalBitmaps.push((loaderMax.getLoader(imgName) as ImageLoader).rawContent);
+				bmps.push((loaderMax.getLoader(imgName) as ImageLoader).rawContent);
 			}
 			
-			ShadowUtil.addShadowsToBMPs(originalBitmaps, pageWidth, pageHeight);
-			
-			for each(bmp in originalBitmaps) {
-				texture = Texture.fromBitmap(bmp);	
-				textures.push(texture);
-			}
-			
-			pageFlipContainer = new PageFlipContainer(textures,800,480,8);
+			pageFlipContainer = new PageFlipContainer(bmps,bookWidth, bookHeight);
 			pageFlipContainer.x = 100;
 			pageFlipContainer.y = 100;
 			addChild(pageFlipContainer);
+			
+			navigationContainer = new NavigationContainer(bmps.length, bookWidth, bookHeight);
+			navigationContainer.x = (Constants.DESIGN_WIDTH - navigationContainer.width)/2;
+			navigationContainer.y = pageFlipContainer.y + bookHeight + 50;
+			addChild(navigationContainer);
 		}
+		
 	}
 }
