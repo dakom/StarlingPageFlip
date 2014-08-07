@@ -19,7 +19,6 @@ Runtime images are in assets/runtime (not bin-release)
 
 **NEW FEATURES:**
 
-
 1. Dynamic Images (Remove need for TextureAtlas)
   * Ditch QuadBatch for cached pages
   * Use multiple QuadBatch's for soft pages
@@ -27,15 +26,20 @@ Runtime images are in assets/runtime (not bin-release)
 2. Pre-cache images (not necessarily better performance, depends on use case, but also necessary to allow for showing non-current images)
 3. Keep old pages visible on stage- to for layering and seeing underneath, esp. useful with different shaped pages/covers
 4. No reliance on classic flash shapes, rather use starling shapes (performance increase probably)
+5. Internal shadows are created at runtime
+6. Internal shadows can mask by alpha channel of page (default is off, since it bleeds a bit)
 
 **TO-DO:**
 
-1. Soft mode should pull from top or sides
+1. Soft mode should allow pulling from top or sides, not just bottom corner <-- could really use some help on this :)
 2. Allow non-current pages to fan out, more 3d look (partially done since they are now in BG)
 3. External shadows, more 3d look (could simply use Starling DropShadow filter?)
 4. Make gotoPage fan through with animation
 5. More fluidity for custom sizes
-  * Internal Shadows should be created at runtime
-6. Internal Shadows should mask by alpha channel of page
 
-_Will update here as it's worked on_
+**EXTRAS:**
+
+1. When screen size changes, classic flash handles underlying BG while starling scales to fit proportionally
+  * Using Perlin Noise with constants to demonstrate how that can be used to maintain resolution
+  * In a real project, starling BG should blend seamlessly into Flash BG
+  * Easy way to simulate a pseudo-liquid layout, or at least something a little better than black bars, without dealing in Starling

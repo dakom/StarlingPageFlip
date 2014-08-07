@@ -82,15 +82,18 @@ package
 			var textures:Vector.<Texture> = new Vector.<Texture>();
 			var texture:Texture;
 			var bmp:Bitmap;
-			var bmps:Array = new Array();
+			var originalBitmaps:Array = new Array();
+			var pageWidth:Number = 800;
+			var pageHeight:Number = 480;
+			var pageCount:Number = 8;
 			
 			for each(imgName in images) {
-				bmps.push((loaderMax.getLoader(imgName) as ImageLoader).rawContent);
+				originalBitmaps.push((loaderMax.getLoader(imgName) as ImageLoader).rawContent);
 			}
 			
-			ShadowUtil.addShadowsToBMPs(bmps);
+			ShadowUtil.addShadowsToBMPs(originalBitmaps, pageWidth, pageHeight);
 			
-			for each(bmp in bmps) {
+			for each(bmp in originalBitmaps) {
 				texture = Texture.fromBitmap(bmp);	
 				textures.push(texture);
 			}

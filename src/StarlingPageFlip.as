@@ -2,10 +2,13 @@ package
 {
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
+	import flash.display.GradientType;
+	import flash.display.Shape;
 	import flash.display.Sprite;
 	import flash.display.StageAlign;
 	import flash.display.StageScaleMode;
 	import flash.events.Event;
+	import flash.geom.Matrix;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	
@@ -28,14 +31,11 @@ package
 		[Embed(source="../assets/compiletime/BG_HD.png")]
 		private static var BackgroundHD:Class;
 		
-		[Embed(source="../assets/compiletime/FlashBG.jpg")]
-		private static var FlashBackgroundClass:Class;
-		
 		private var viewPort:Rectangle;
 		private var background:Bitmap;
 		private var mStarling:Starling;
 		
-		private var originalFlashBackground:Bitmap = null;
+		private var flashBGShape:Shape = null;
 		private var flashBackground:Bitmap = null;
 		
 		public function StarlingPageFlip()
@@ -161,8 +161,8 @@ package
 		
 		private function resizeStage(evt:flash.events.Event = null) {
 			var spr:flash.display.Sprite;
+			var mat:Matrix = new Matrix();
 			var bmd:BitmapData;
-			var srcRect:Rectangle;
 			
 			viewPort = getStarlingViewport();
 			
@@ -170,8 +170,10 @@ package
 			mStarling.viewPort = viewPort;
 			
 			
-			if(originalFlashBackground == null) {
-				originalFlashBackground = new FlashBackgroundClass();
+			if(flashBGShape == null) {
+				flashBGShape = new Shape();
+			} else {
+				flashBGShape.graphics.clear();
 			}
 			
 			if(flashBackground != null) {
@@ -179,21 +181,24 @@ package
 				flashBackground.bitmapData.dispose();
 			}
 			
-			srcRect = new Rectangle(0,0,stage.stageWidth, stage.stageHeight);
-			srcRect.x = (originalFlashBackground.width - srcRect.width)/2;
-			srcRect.y = (originalFlashBackground.height - srcRect.height)/2;
 			
 			
-			bmd = new BitmapData(stage.stageWidth, stage.stageHeight);
-			bmd.copyPixels(originalFlashBackground.bitmapData, srcRect, new Point());
+			
+			mat.createGradientBox(stage.stageWidth, stage.stageHeight);
+			flashBGShape.graphics.beginGradientFill(GradientType.RADIAL, [0x20241a, 0x0], [1,1],[0,255], mat);
+			flashBGShape.graphics.drawRect(0,0,stage.stageWidth, stage.stageHeight);
+			flashBGShape.graphics.endFill();
+			
+			
+			
+			bmd = new BitmapData(stage.stageWidth, stage.stageHeight, true);
+			bmd.perlinNoise(1000, 1000, 3, 50, true, true, 7, false);
 			bmd.fillRect(viewPort, 0);
 			
 			flashBackground = new Bitmap(bmd);
 			
 			stage.addChild(flashBackground);
-			
 		}
-		
 		
 		
 		

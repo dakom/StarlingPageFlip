@@ -2,58 +2,59 @@ package pf
 {
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
+	import flash.display.BlendMode;
+	import flash.display.GradientType;
+	import flash.display.Shape;
+	import flash.display.SpreadMethod;
+	import flash.filters.DropShadowFilter;
+	import flash.geom.Matrix;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 
 	public class ShadowUtil
 	{
-		[Embed(source="../../assets/compiletime/pf-high-light.png")]
-		private static const shadowImgClass:Class;
 		
-		public static function addShadowsToBMPs(bmps:Array) {
+		public static function addShadowsToBMPs(inputBitmaps:Array, pageWidth:Number, pageHeight:Number, maskTransparency:Boolean = false) {
+			var shadowWidth:Number = pageWidth/4;
+			var shadowHeight:Number = pageHeight;
 			var bmp:Bitmap;
 			var count:int = 0;
-			var shadowData:BitmapData = (new shadowImgClass() as Bitmap).bitmapData;
+			var shape:Shape = new Shape();
+			var leftShadowData:BitmapData;
+			var rightShadowData:BitmapData;
 			var rect:Rectangle;
 			var point:Point;
+			var targetShadowData:BitmapData;
+			var mat:Matrix;
 			
-			for(count = 1; count < bmps.length-1; count++) {
-				bmp = bmps[count];
+			mat = new Matrix();
+			mat.createGradientBox(shadowWidth, shadowHeight);
+			
+			shape.graphics.beginGradientFill(GradientType.LINEAR, [0,0,0,0], [.8,.6,.2,0], [0,2,130,255], mat);
+			shape.graphics.drawRect(0,0,shadowWidth, shadowHeight);
+			shape.graphics.endFill();
+			
+			rightShadowData = new BitmapData(shadowWidth, shadowHeight, true, 0);
+			rightShadowData.draw(shape);
+			
+			leftShadowData = new BitmapData(shadowWidth, shadowHeight, true, 0);
+			leftShadowData.draw(shape, new Matrix( -1, 0, 0, 1, shadowWidth, 0));
+			
+			
+			
+			
+			for(count = 1; count < inputBitmaps.length-1; count++) {
+				bmp = inputBitmaps[count];
 				
 				if(count%2==0) {
-					rect = new Rectangle(shadowData.width/2,0,shadowData.width/2,shadowData.height);
 					point = new Point();
+					targetShadowData = rightShadowData;
 				} else {
-					rect = new Rectangle(0,0,shadowData.width/2,shadowData.height);
-					point = new Point(bmp.width-shadowData.width/2,0);
+					point = new Point(bmp.width-shadowWidth,0);
+					targetShadowData = leftShadowData;
 				}
 				
-				bmp.bitmapData.copyPixels(shadowData,rect,point,null,null,true);
-			}
-		}
-		public static function addShadowsToAtlas(bookImgs:Bitmap,xml:XML):void
-		{
-			var sourceData:BitmapData = bookImgs.bitmapData;
-			var shadowData:BitmapData = (new shadowImgClass() as Bitmap).bitmapData;
-			var count:int = 0;
-			var bookCount:int = xml.SubTexture.length();
-			for each (var node:XML in xml.SubTexture) 
-			{
-				var x:Number = Number(node.@x);
-				var y:Number = Number(node.@y);
-				var w:Number = Number(node.@width);
-				var h:Number = Number(node.@height);
-				if(count > 0 && count < bookCount-1)
-				{
-					var rect:Rectangle = new Rectangle(0,0,shadowData.width/2,shadowData.height);
-					if(count%2==0)
-						rect = new Rectangle(shadowData.width/2,0,shadowData.width/2,shadowData.height);
-					var point:Point = new Point(x,y);
-					if(count%2!=0)
-						point = new Point(x+w-shadowData.width/2,y);
-					sourceData.copyPixels(shadowData,rect,point,null,null,true);
-				}
-				count++;
+				bmp.bitmapData.copyPixels(targetShadowData, new Rectangle(0,0,shadowWidth,shadowHeight),point,maskTransparency ? bmp.bitmapData : null,null,true);
 			}
 		}
 	}
