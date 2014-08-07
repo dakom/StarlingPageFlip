@@ -30,7 +30,7 @@ Runtime images are in assets/runtime (not bin-release)
   * ShadowUtil operates on series of bitmaps instead of TextureAtlas
 2. Pre-cache images (not necessarily better performance, depends on use case, but also necessary to allow for showing non-current images)
 3. Keep old pages visible on stage- for layering and seeing underneath, esp. useful with different shaped pages/covers
-4. No reliance on classic flash shapes, rather use starling shapes (performance increase probably)
+4. No reliance on classic flash shapes (other than inner page shadow), rather use starling shapes wherever shapes are needed
 5. Internal shadows are created at runtime (check out ShadowUtil- can adjust parameters there for different look)
 6. Internal shadows can mask by alpha channel of page (default is off, since it bleeds a bit)
 
