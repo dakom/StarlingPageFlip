@@ -51,9 +51,10 @@ Runtime images are in assets/runtime (not bin-release)
 
 **Easier to-do items that are still essential:**
 
-3. More fluidity for custom sizes
+1. More fluidity for custom sizes
+2. Test on iOS
  
 **These are not as essential, more just icing on the cake**
 
-4. Allow non-current pages to fan out, more 3d look (partially done since they are now in BG)
-5. External shadows, more 3d look (could simply use Starling DropShadow filter?)
+1. Allow non-current pages to fan out, more 3d look (partially done since they are now in BG)
+2. External shadows, more 3d look (could simply use Starling DropShadow filter?
