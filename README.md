@@ -45,12 +45,15 @@ Runtime images are in assets/runtime (not bin-release)
 **TO-DO:**
 
 **Could _really_ use some help on these essential but difficult items:**
+
 1. Soft mode should allow pulling from top or sides, not just bottom corner (this might not be so hard if you're familiar with gpu stuff)
 2. Make gotoPage fan through with animation
 
 **Easier to-do items that are still essential:**
+
 3. More fluidity for custom sizes
  
 **These are not as essential, more just icing on the cake**
+
 4. Allow non-current pages to fan out, more 3d look (partially done since they are now in BG)
 5. External shadows, more 3d look (could simply use Starling DropShadow filter?)
