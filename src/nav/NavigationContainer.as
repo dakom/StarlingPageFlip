@@ -32,6 +32,8 @@ package nav
 		private static var sHelperTouches:Vector.<Touch> = new <Touch>[];
 		private static var sHelperPoint:Point = new Point();
 		
+		private var bgRect:Shape;
+		
 		
 		public function NavigationContainer(_totalPages:uint, _bookWidth:Number, _bookHeight:Number)
 		{
@@ -52,6 +54,8 @@ package nav
 			
 			var idx:uint;
 			var circle:Shape;
+			var bg:Graphics;
+			var lastRect:Rectangle = new Rectangle();
 			
 			leftArrow = drawTriangle(new Shape(), arrowSize, buttonLineColor, buttonFillColor);
 			leftArrow.pivotX = leftArrow.width  / 2;
@@ -61,12 +65,39 @@ package nav
 		
 			circles = new Array();
 			
+			bgRect = new Shape();
+			bg = bgRect.graphics;
+			bg.beginFill(0xFF0000, .3);
+			bg.lineStyle(1, 0xFFFFFF, .5);
+			
 			for(idx = 0; idx < totalPages; idx++) {
+				
+				
+				
 				circle = drawCircle(new Shape(), circleSize, buttonLineColor, -1);
 				circle.name = idx.toString();
 				circle.x = this.width + 10;
 				addChild(circle);
 				circles.push(circle);
+				
+				if(!idx || idx == totalPages-1) {
+					lastRect.x = circle.x - circleSize;
+					lastRect.y = circle.y - circleSize;
+					lastRect.width = circle.width;
+					lastRect.height = circle.height;
+				} else if((idx % 2)) {
+					lastRect.x = circle.x - circleSize;
+					lastRect.y = circle.y - circleSize;
+					lastRect.width = circle.width;
+					lastRect.height = circle.height;
+				} else {
+					lastRect.width = (circle.width*2)+10;
+				}
+				
+				
+				if(!idx || !(idx % 2) || idx == totalPages-1) {
+					bg.drawRect(lastRect.x, lastRect.y, lastRect.width, lastRect.height);
+				}
 			}
 			
 			rightArrow = drawTriangle(new Shape(), arrowSize, buttonLineColor, buttonFillColor);
@@ -75,6 +106,9 @@ package nav
 			rightArrow.rotation = deg2rad(90);
 			rightArrow.x = this.width + 10;
 			addChild(rightArrow);
+			
+			
+			addChildAt(bgRect, 0);
 		}
 		
 		private function drawTriangle(shape:Shape, height:Number, lineColor:int, fillColor:int):Shape {
@@ -151,7 +185,7 @@ package nav
 		}
 		
 		
-		public function setCurrentIndex(targetIndex:uint, suppressDispatch:Boolean = false) {
+		public function setCurrentIndex(targetIndex:uint, dispatchAfter:Boolean = true) {
 			var circle:Shape;
 			
 			if(_currentIndex >= 0) {
@@ -163,20 +197,20 @@ package nav
 			circle = circles[_currentIndex];
 			drawCircle(circle, circleSize, buttonLineColor, buttonFillColor);
 			
-			if(!_currentIndex && leftArrow.alpha == 1) {
+			if(!_currentIndex) {
 				leftArrow.alpha = .3;
-			} else if(leftArrow.alpha == .3) {
+			} else {
 				leftArrow.alpha = 1;
 			}
 			
-			if(_currentIndex == totalPages-1 && rightArrow.alpha == 1) {
+			if(_currentIndex == totalPages-1) {
 				rightArrow.alpha = .3;
-			} else if(rightArrow.alpha == .3) {
+			} else {
 				rightArrow.alpha = 1;
 			}
 			
 			
-			if(!suppressDispatch) {
+			if(dispatchAfter) {
 				dispatchEventWith(Event.CHANGE, false, _currentIndex);
 			}
 		}

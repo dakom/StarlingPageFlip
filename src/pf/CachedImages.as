@@ -8,7 +8,6 @@ package pf
 	public class CachedImages extends Sprite
 	{
 		private var imgs:Object;
-		private var currentShowing:int = -1;
 		private var reversedOrder:Boolean;
 		private var totalCount:uint;
 		
@@ -36,27 +35,21 @@ package pf
 		public function showImage(num:int) {
 			var idx:int;
 			
-			if(currentShowing != num) {
-				removeChildren();
-				
-				if(reversedOrder) {
-					for(idx = totalCount-1; idx >= num; idx--) {
-						addChild(imgs[idx]);	
-					}
-				} else {
-					for(idx = 0; idx <= num; idx++) {
-						addChild(imgs[idx]);
-					}
+			removeChildren();
+			
+			if(reversedOrder) {
+				for(idx = totalCount-1; idx >= num; idx--) {
+					addChild(imgs[idx]);	
 				}
-				
-				currentShowing = num;
-				
-				
+			} else {
+				for(idx = 0; idx <= num; idx++) {
+					addChild(imgs[idx]);
+				}
 			}
+			
 		}
 		
 		public function nullify() {
-			currentShowing = NaN;
 			removeChildren();
 		}
 	}

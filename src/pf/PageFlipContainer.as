@@ -120,7 +120,7 @@ package pf
 		{
 			if(stage == null || !needUpdate) {
 				return;
-			}
+			} 
 			
 			
 			if(flipingPageNum >= 0)
@@ -165,9 +165,14 @@ package pf
 				{
 					flipImage.texture = flipingPageLocationX>=0?textures[flipingPageNum]:textures[flipingPageNum+1];
 					flipImage.readjustSize();
-					flipImage.setLocation(flipingPageLocationX);
-					addChild(flipImage);	
+					flipImage.setLocation(flipingPageLocationX);	
+					
+					if(!contains(flipImage)) {
+						addChild(flipImage);
+					}
 				}
+				
+				
 				
 				
 			} else {
@@ -215,6 +220,7 @@ package pf
 						flipingPageNum = -1;
 						return;
 					}
+					
 				}
 				else if(touch.phase == TouchPhase.MOVED)
 				{
@@ -259,13 +265,33 @@ package pf
 		private function finishTouchByMotion(endX:Number):void
 		{
 			var imgWidth:Number = bookWidth/2;
+			var targetPage:int;
+			
 			needUpdate = true;
 			touchable = false;
+			
+			
+			//This could probably be a little less hacky... figured out by reverse engineering more than logic. But it works :)
+			
+			if(flipingPageLocationX >= 0) {
+				targetPage = flipingPageNum-1;	
+			} else {
+				targetPage = flipingPageNum+1;
+			}
+			
+			if(targetPage != leftPageNum) {
+				targetPage--;
+			}
+			
+			dispatchEventWith(Event.CHANGE, false, targetPage);
+			
+			
 			addEventListener(Event.ENTER_FRAME,executeMotion);
 			function executeMotion(event:Event):void
 			{
 				if(endX >= imgWidth)
 				{
+					
 					flipingPageLocationX += (1-flipingPageLocationX)/4;
 					flipingPageLocationY = flipingPageLocationX;
 					if(flipingPageLocationX >= 0.999)
@@ -278,6 +304,7 @@ package pf
 				}
 				else
 				{
+					
 					flipingPageLocationX += (-1-flipingPageLocationX)/4;
 					flipingPageLocationY = -flipingPageLocationX;
 					if(flipingPageLocationX <= -0.999)
@@ -293,6 +320,9 @@ package pf
 		
 		private function tweenCompleteHandler():void
 		{
+			
+			
+			
 			if(flipingPageLocationX == 1)
 			{
 				leftPageNum = flipingPageNum-1;
@@ -308,6 +338,8 @@ package pf
 			validateNow();
 			touchable = true;
 			debugGraphics.clear();
+			
+			
 		}
 		
 		private function validatePageNumber(pageNum:int):Boolean
@@ -334,7 +366,46 @@ package pf
 		}
 		
 		public function gotoPage(pn:int):void
-		{
+		{	
+			
+			cachedImagesLeft.nullify();
+			cachedImagesRight.nullify();
+			
+			if(contains(flipImage)) {
+				removeChild(flipImage);
+			}
+			
+			
+			if(!pn) {
+				leftPageNum = -1;
+				rightPageNum = 0;
+			} else if(pn == pageCount-1) {
+				leftPageNum = pn;
+				rightPageNum = -1;
+			} else {
+				if(pn%2==0) {
+					leftPageNum = pn-1;
+					rightPageNum = pn;
+				} else {
+					leftPageNum = pn;
+					rightPageNum = pn+1;
+				}
+			}
+			
+			flipingPageNum = -1;
+			resetSoftMode();
+			validateNow();
+			
+			if(leftPageNum >= 0) {
+				cachedImagesLeft.showImage(leftPageNum);
+			}
+			
+			if(rightPageNum >= 0) {
+				cachedImagesRight.showImage(rightPageNum);
+			}
+			
+			
+			/*
 			if(pn < 0)
 				pn = 0;
 			if(pn >= pageCount)
@@ -359,6 +430,10 @@ package pf
 			flipingPageNum = -1;
 			resetSoftMode();
 			validateNow();
+			
+			cachedImagesLeft.showImage(leftPageNum);
+			cachedImagesRight.showImage(rightPageNum);
+			*/
 		}
 	}
 }

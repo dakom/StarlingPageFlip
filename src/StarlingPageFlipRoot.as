@@ -17,6 +17,7 @@ package
 	
 	import starling.display.Image;
 	import starling.display.Sprite;
+	import starling.events.Event;
 	import starling.textures.Texture;
 	import starling.textures.TextureAtlas;
 	
@@ -93,7 +94,9 @@ package
 				bmps.push((loaderMax.getLoader(imgName) as ImageLoader).rawContent);
 			}
 			
+			
 			pageFlipContainer = new PageFlipContainer(bmps,bookWidth, bookHeight);
+			pageFlipContainer.addEventListener(Event.CHANGE, bookChanged);
 			pageFlipContainer.x = 100;
 			pageFlipContainer.y = 100;
 			addChild(pageFlipContainer);
@@ -101,7 +104,19 @@ package
 			navigationContainer = new NavigationContainer(bmps.length, bookWidth, bookHeight);
 			navigationContainer.x = (Constants.DESIGN_WIDTH - navigationContainer.width)/2;
 			navigationContainer.y = pageFlipContainer.y + bookHeight + 50;
+			navigationContainer.addEventListener(Event.CHANGE, navigationChanged);
 			addChild(navigationContainer);
+		}
+		
+		private function bookChanged(evt:Event) {
+			var newPageNum:int = evt.data as int;
+			navigationContainer.setCurrentIndex(newPageNum+1, false);
+		}
+		
+		private function navigationChanged(evt:Event) {
+			var newPageNum:int = evt.data as int;
+			
+			pageFlipContainer.gotoPage(newPageNum);
 		}
 		
 	}
