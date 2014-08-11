@@ -79,7 +79,10 @@ package
 			if(loaderMax.getChildren(true).length != loaderMax.getChildrenByStatus(LoaderStatus.COMPLETED, true).length) {
 				throw new Error("Error loading runtime assets!");
 			} else {
-				showPageFlip();	
+				showPageFlip();
+				
+				//navigationContainer.setCurrentIndex(8, false);
+				//pageFlipContainer.gotoPage(9);
 			}
 		}
 		

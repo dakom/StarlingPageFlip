@@ -89,8 +89,8 @@ package pf
 		private function initPage():void
 		{
 			
-			cachedImagesLeft = new CachedImages(false, textures);
-			cachedImagesRight = new CachedImages(true, textures);
+			cachedImagesLeft = new CachedImages(CachedImages.LEFT, textures);
+			cachedImagesRight = new CachedImages(CachedImages.RIGHT, textures);
 			cachedImagesRight.x = bookWidth/2;
 			
 			addChild(cachedImagesLeft);

@@ -41,20 +41,25 @@ Runtime images are in assets/runtime (not bin-release)
   * Using Perlin Noise with constants to demonstrate how that can be used to maintain resolution
   * In a real project, starling BG should blend seamlessly into Flash BG
   * Easy way to simulate a pseudo-liquid layout, or at least something a little better than black bars, without dealing in Starling
+9. Allow non-current pages to fan out, more 3d look (partially done since they are now in BG)
   
-**TO-DO:**
+  
+**TO-DO - BUGS:**
 
-**Could _really_ use some help on these essential but difficult items:**
+1. Shadows are going past corners on cached images
+
+**TO-DO - FEATURES:**
+
+**Could _really_ use some help on these essential but difficult features:**
 
 1. Soft mode should allow pulling from top or sides, not just bottom corner (this might not be so hard if you're familiar with gpu stuff)
 2. Make gotoPage fan through with animation
 
-**Easier to-do items that are still essential:**
+**Easier to-do features that are still essential:**
 
 1. More fluidity for custom sizes
 2. Test on iOS
+3. Ability to grab non-current pages, for quick-jump only
  
 **These are not as essential, more just icing on the cake**
-
-1. Allow non-current pages to fan out, more 3d look (partially done since they are now in BG)
-2. External shadows, more 3d look (could simply use Starling DropShadow filter?
+1. External shadows, more 3d look (could simply use Starling DropShadow filter?

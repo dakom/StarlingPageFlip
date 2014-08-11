@@ -4,26 +4,31 @@ package pf
 	import starling.display.Sprite;
 	import starling.filters.BlurFilter;
 	import starling.textures.Texture;
-	
+	import starling.utils.deg2rad;
 	public class CachedImages extends Sprite
 	{
+		public static const LEFT:String = 'left';
+		public static const RIGHT:String = 'right';
+		
 		private var imgs:Object;
-		private var reversedOrder:Boolean;
+		private var side:String;
 		private var totalCount:uint;
 		
-		public function CachedImages(_reversedOrder:Boolean, textures:Vector.<Texture>)
+		public function CachedImages(_side:String, textures:Vector.<Texture>)
 		{
 			var idx:uint;
 			
 			super();
 			
-			reversedOrder = _reversedOrder;
+			side = _side;
 			totalCount = textures.length;
 			imgs = new Object();
 			
 			for(idx = 0; idx < textures.length; idx++) {
 				imgs[idx] = new Image(textures[idx]);
 			}
+			
+			
 		}
 		
 		public function hasImage(num:int) {
@@ -34,16 +39,28 @@ package pf
 		
 		public function showImage(num:int) {
 			var idx:int;
+			var img:Image;
+			var spacing:Number = 10;
+			var offset:int;
 			
 			removeChildren();
 			
-			if(reversedOrder) {
-				for(idx = totalCount-1; idx >= num; idx--) {
-					addChild(imgs[idx]);	
+			if(side == RIGHT) {
+				for(idx = totalCount-1, offset = (idx-num); idx >= num; idx--, offset--) {
+					img = imgs[idx];
+					
+					img.x = (offset*spacing);
+					
+					addChild(img);
 				}
 			} else {
-				for(idx = 0; idx <= num; idx++) {
-					addChild(imgs[idx]);
+				for(idx = 0, offset = num; idx <= num; idx++, offset--) {
+					img = imgs[idx];
+					
+					img.x = -(offset * spacing);
+					
+					addChild(img);
+					
 				}
 			}
 			
