@@ -47,19 +47,24 @@ package pf
 			
 			if(side == RIGHT) {
 				for(idx = totalCount-1, offset = (idx-num); idx >= num; idx--, offset--) {
-					img = imgs[idx];
+					if(idx %2 == 0) {
 					
-					img.x = (offset*spacing);
+						img = imgs[idx];
 					
-					addChild(img);
+						img.x = (offset*spacing);
+					
+						addChild(img);
+					}
 				}
 			} else {
 				for(idx = 0, offset = num; idx <= num; idx++, offset--) {
-					img = imgs[idx];
+					if(idx % 2 != 0) {
+						img = imgs[idx];
 					
-					img.x = -(offset * spacing);
+						img.x = -(offset * spacing);
 					
-					addChild(img);
+						addChild(img);
+					}
 					
 				}
 			}
