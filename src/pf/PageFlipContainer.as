@@ -101,7 +101,8 @@ package pf
 			addEventListener(Event.ADDED_TO_STAGE,firstFrameInit);
 			addEventListener(TouchEvent.TOUCH,onTouchHandler);
 			
-			
+			cachedImagesLeft.addEventListener(Event.CHANGE, cachedImageChanged);
+			cachedImagesRight.addEventListener(Event.CHANGE, cachedImageChanged);
 		}
 		
 		private function firstFrameInit():void
@@ -373,8 +374,17 @@ package pf
 			needUpdate = false;
 		}
 		
+		private function cachedImageChanged(evt:Event) {
+			var idx:int = evt.data as int;
+			
+			gotoPage(idx);
+			
+			dispatchEventWith(Event.CHANGE, false, idx-1);
+		}
+		
 		public function gotoPage(pn:int):void
 		{	
+			
 			
 			if(contains(flipImage)) {
 				removeChild(flipImage);
@@ -408,37 +418,6 @@ package pf
 			if(rightPageNum >= 0) {
 				cachedImagesRight.showImage(rightPageNum);
 			}
-			
-			
-			/*
-			if(pn < 0)
-				pn = 0;
-			if(pn >= pageCount)
-				pn = pageCount-1;
-			if(pn == 0)
-			{
-				leftPageNum = -1;
-				rightPageNum = 0;
-			}
-			else if(pn == pageCount-1)
-			{
-				leftPageNum = pn;
-				rightPageNum = -1;
-			}
-			else
-			{
-				if(pn%2==0)
-					pn = pn - 1;
-				leftPageNum = pn;
-				rightPageNum = pn+1;
-			}
-			flipingPageNum = -1;
-			resetSoftMode();
-			validateNow();
-			
-			cachedImagesLeft.showImage(leftPageNum);
-			cachedImagesRight.showImage(rightPageNum);
-			*/
 		}
 	}
 }

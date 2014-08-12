@@ -2,10 +2,15 @@ package pf
 {
 	import starling.display.Image;
 	import starling.display.Sprite;
+	import starling.events.Event;
+	import starling.events.Touch;
+	import starling.events.TouchEvent;
+	import starling.events.TouchPhase;
 	import starling.filters.BlurFilter;
 	import starling.textures.Texture;
 	import starling.utils.deg2rad;
 	import starling.utils.rad2deg;
+
 	public class CachedImages extends Sprite
 	{
 		public static const LEFT:String = 'left';
@@ -15,6 +20,8 @@ package pf
 		
 		private static var totalCount:uint;
 		private static var imgs:Array;
+		private static var sHelperTouches:Vector.<Touch> = new <Touch>[];
+		private var currentIndex:int;
 		
 		public function CachedImages(_side:String, textures:Vector.<Texture>)
 		{
@@ -43,6 +50,26 @@ package pf
 					} else {
 						img.filter = BlurFilter.createDropShadow(4, deg2rad(135), 0, .5,3,.5);
 					}
+					
+					
+					img.addEventListener(TouchEvent.TOUCH,onTouchHandler);
+				}
+			}
+		}
+		
+		private function onTouchHandler(evt:TouchEvent) {
+			var touch:Touch;
+			var idx:uint;
+			var img:Image = evt.target as Image;
+			
+			sHelperTouches.length = 0;
+			evt.getTouches(img, TouchPhase.BEGAN, sHelperTouches);
+			for each(touch in sHelperTouches) {
+				idx = imgs.indexOf(img);
+				
+				
+				if(idx != currentIndex) {
+					dispatchEventWith(Event.CHANGE, false, idx);
 				}
 			}
 		}
@@ -54,6 +81,8 @@ package pf
 			var offset:int;
 			
 			removeChildren();
+			
+			currentIndex = num;
 			
 			if(num >= 0 && num < totalCount) {
 				if(side == RIGHT) {

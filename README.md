@@ -42,7 +42,7 @@ Runtime images are in assets/runtime (not bin-release)
   * In a real project, starling BG should blend seamlessly into Flash BG
   * Easy way to simulate a pseudo-liquid layout, or at least something a little better than black bars, without dealing in Starling
 9. Allow non-current pages to fan out, more 3d look (partially done since they are now in BG)
-  
+10. Ability to grab non-current pages, for quick-jump only  
   
 **TO-DO - BUGS:**
 
@@ -59,7 +59,3 @@ Runtime images are in assets/runtime (not bin-release)
 
 1. More fluidity for custom sizes
 2. Test on iOS
-3. Ability to grab non-current pages, for quick-jump only
- 
-**These are not as essential, more just icing on the cake**
-1. External shadows, more 3d look (could simply use Starling DropShadow filter?
