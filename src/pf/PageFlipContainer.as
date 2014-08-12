@@ -110,7 +110,8 @@ package pf
 			
 			
 			removeEventListener(Event.ADDED_TO_STAGE,firstFrameInit);
-			enterFrameHandler();
+			
+			validateNow();
 			needUpdate = false;
 		}
 		
@@ -129,6 +130,7 @@ package pf
 				rightPageNum = flipingPageNum + 2;
 			}
 			
+			/*
 			if(validatePageNumber(leftPageNum))
 			{
 				cachedImagesLeft.showImage(leftPageNum);
@@ -142,6 +144,7 @@ package pf
 			}  else {
 				cachedImagesRight.nullify();
 			}
+			*/
 			
 			if(validatePageNumber(flipingPageNum))
 			{
@@ -285,7 +288,6 @@ package pf
 			
 			dispatchEventWith(Event.CHANGE, false, targetPage);
 			
-			
 			addEventListener(Event.ENTER_FRAME,executeMotion);
 			function executeMotion(event:Event):void
 			{
@@ -333,13 +335,18 @@ package pf
 				leftPageNum = flipingPageNum+1;
 				rightPageNum = flipingPageNum+2;
 			}
+			
 			flipingPageNum = -1;
 			resetSoftMode();
 			validateNow();
 			touchable = true;
 			debugGraphics.clear();
 			
-			
+		}
+		
+		private function redrawCachedPages() {
+			cachedImagesLeft.showImage(leftPageNum);
+			cachedImagesRight.showImage(rightPageNum);
 		}
 		
 		private function validatePageNumber(pageNum:int):Boolean
@@ -361,15 +368,13 @@ package pf
 		public function validateNow():void
 		{
 			needUpdate = true;
+			redrawCachedPages();
 			enterFrameHandler();
 			needUpdate = false;
 		}
 		
 		public function gotoPage(pn:int):void
 		{	
-			
-			cachedImagesLeft.nullify();
-			cachedImagesRight.nullify();
 			
 			if(contains(flipImage)) {
 				removeChild(flipImage);
