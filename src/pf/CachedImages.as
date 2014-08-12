@@ -10,9 +10,10 @@ package pf
 		public static const LEFT:String = 'left';
 		public static const RIGHT:String = 'right';
 		
-		private var imgs:Object;
 		private var side:String;
-		private var totalCount:uint;
+		
+		private static var totalCount:uint;
+		private static var imgs:Array;
 		
 		public function CachedImages(_side:String, textures:Vector.<Texture>)
 		{
@@ -21,21 +22,16 @@ package pf
 			super();
 			
 			side = _side;
-			totalCount = textures.length;
-			imgs = new Object();
 			
-			for(idx = 0; idx < textures.length; idx++) {
-				imgs[idx] = new Image(textures[idx]);
+			if(imgs == null) {
+				totalCount = textures.length;
+				imgs = new Array();
+			
+				for(idx = 0; idx < textures.length; idx++) {
+					imgs.push(new Image(textures[idx]));
+				}
 			}
-			
-			
 		}
-		
-		public function hasImage(num:int) {
-			
-			return(imgs[num] ? true : false);
-		}
-		
 		
 		public function showImage(num:int) {
 			var idx:int;
@@ -48,11 +44,8 @@ package pf
 			if(side == RIGHT) {
 				for(idx = totalCount-1, offset = (idx-num); idx >= num; idx--, offset--) {
 					if(idx %2 == 0) {
-					
 						img = imgs[idx];
-					
 						img.x = (offset*spacing);
-					
 						addChild(img);
 					}
 				}
@@ -60,19 +53,17 @@ package pf
 				for(idx = 0, offset = num; idx <= num; idx++, offset--) {
 					if(idx % 2 != 0) {
 						img = imgs[idx];
-					
 						img.x = -(offset * spacing);
-					
 						addChild(img);
 					}
 					
 				}
 			}
-			
 		}
 		
 		public function nullify() {
 			removeChildren();
 		}
+		
 	}
 }
