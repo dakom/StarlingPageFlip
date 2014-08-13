@@ -44,18 +44,9 @@ Runtime images are in assets/runtime (not bin-release)
 9. Allow non-current pages to fan out, more 3d look (partially done since they are now in BG)
 10. Ability to grab non-current pages, for quick-jump only  
   
-**TO-DO - BUGS:**
 
-1. Shadows are going past corners on cached images
-
-**TO-DO - FEATURES:**
-
-**Could _really_ use some help on these essential but difficult features:**
+**TO-DO - FEATURES (could _really) use some help here!:**
 
 1. Soft mode should allow pulling from top or sides, not just bottom corner (this might not be so hard if you're familiar with gpu stuff)
 2. Make gotoPage fan through with animation
-
-**Easier to-do features that are still essential:**
-
-1. More fluidity for custom sizes
-2. Test on iOS
+3. Performance (only getting ~10-30fps on iOS!!!)
