@@ -108,7 +108,7 @@ package foundation
 			
 			navigationContainer = new NavigationContainer(bmps.length, bookWidth, bookHeight);
 			navigationContainer.x = (Constants.DESIGN_WIDTH - navigationContainer.width)/2;
-			navigationContainer.y = pageFlipContainer.y + bookHeight + 50;
+			navigationContainer.y = 630;
 			navigationContainer.addEventListener(Event.CHANGE, navigationChanged);
 			addChild(navigationContainer);
 		}

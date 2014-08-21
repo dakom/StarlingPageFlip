@@ -23,6 +23,8 @@ package book.pf
 		private static var sHelperTouches:Vector.<Touch> = new <Touch>[];
 		private var currentIndex:int;
 		
+		
+		
 		public function CachedImages(_side:String, textures:Vector.<Texture>)
 		{
 			var idx:uint;
@@ -55,6 +57,8 @@ package book.pf
 					img.addEventListener(TouchEvent.TOUCH,onTouchHandler);
 				}
 			}
+			
+			
 		}
 		
 		private function onTouchHandler(evt:TouchEvent) {
@@ -84,6 +88,7 @@ package book.pf
 			
 			currentIndex = num;
 			
+			
 			if(num >= 0 && num < totalCount) {
 				if(side == RIGHT) {
 					for(idx = totalCount-1, offset = (idx-num); idx >= num; idx--, offset--) {
@@ -104,6 +109,9 @@ package book.pf
 					}
 				}
 			}
+			
+			//This causes more and more textures to allocate (in Scout), eventually crashing the app
+			//this.flatten();
 		}
 		
 		

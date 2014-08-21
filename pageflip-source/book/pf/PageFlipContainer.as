@@ -368,10 +368,12 @@ package book.pf
 		
 		public function validateNow():void
 		{
+			
 			needUpdate = true;
 			redrawCachedPages();
 			enterFrameHandler();
 			needUpdate = false;
+			
 		}
 		
 		private function cachedImageChanged(evt:Event) {
