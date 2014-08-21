@@ -16,11 +16,13 @@ Just open the html file in bin-release folder via your browser
 Note that it's using use-network=false and expects therefore to open locally via file://, not via server
 Runtime images are in assets/runtime (not bin-release)
 
-**REQUIREMENTS:**
+**REQUIREMENTS TO COMPILE:**
 
 1. Greensock (swc is here in lib folder)
 2. Starling (swc is here in lib folder)
 3. Starling-Graphics extension (source in src folder)
+
+Also, make sure you include the "pageflip-source" folder into the build. It's separated out from src to allow different targets to build easily (web, mobile, desktop), even though only the web version is included on this repository.
 
 **NEW FEATURES:**
 
@@ -45,8 +47,8 @@ Runtime images are in assets/runtime (not bin-release)
 10. Ability to grab non-current pages, for quick-jump only  
   
 
-**TO-DO - FEATURES (could _really) use some help here!:**
+**TO-DO - FEATURES (could _really_) use some help here!:**
 
 1. Soft mode should allow pulling from top or sides, not just bottom corner (this might not be so hard if you're familiar with gpu stuff)
 2. Make gotoPage fan through with animation
-3. Performance (only getting ~10-30fps on iOS!!!)
+3. Performance (only getting ~10-30fps on iOS, WHILE IDLE!!!) - currently working on this, note commented-out flatten() in CachedImages()
