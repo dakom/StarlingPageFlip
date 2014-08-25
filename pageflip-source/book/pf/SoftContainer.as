@@ -41,7 +41,6 @@ package book.pf
 			
 			qb.addImage(img);
 			
-			
 		}
 	}
 }

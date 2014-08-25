@@ -3,6 +3,8 @@ package book.nav
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	
+	import foundation.Constants;
+	
 	import starling.display.Graphics;
 	import starling.display.Shape;
 	import starling.display.Sprite;
@@ -49,6 +51,10 @@ package book.nav
 			setCurrentIndex(0);
 			
 			this.addEventListener(TouchEvent.TOUCH, gotTouch);
+			
+		
+			this.x = arrowSize/2 + (Constants.DESIGN_WIDTH - (this.width))/2;
+			this.y = 630;
 		}
 		
 		private function initButtons() {
@@ -72,8 +78,6 @@ package book.nav
 			bg.lineStyle(1, 0xFFFFFF, .5);
 			
 			for(idx = 0; idx < totalPages; idx++) {
-				
-				
 				
 				circle = drawCircle(new Shape(), circleSize, buttonLineColor, -1);
 				circle.name = idx.toString();

@@ -60,25 +60,18 @@ package book.pf
 		
 		private var softContainer:SoftContainer = null;
 		
-		public function PageFlipContainer(bmps:Array, _bookWidth:Number, _bookHeight:Number)
+		private var bmps:Array;
+		
+		public function PageFlipContainer(_bmps:Array, _bookWidth:Number, _bookHeight:Number)
 		{
-			var bmp:Bitmap;
-			var texture:Texture;
 			
 			super();
 			
 			this.bookWidth = _bookWidth;
 			this.bookHeight = _bookHeight;
-			this.pageCount = bmps.length;
+			this.pageCount = _bmps.length;
 			
-			ShadowUtil.addShadowsToBMPs(bmps, bookWidth, bookHeight);
-			this.textures = new Vector.<Texture>();
-			
-			for each(bmp in bmps) {
-				texture = Texture.fromBitmap(bmp);	
-				textures.push(texture);
-			}
-			
+			bmps = _bmps;
 			debugShape = new Shape();
 			
 			this.debugGraphics = debugShape.graphics;
@@ -88,13 +81,24 @@ package book.pf
 		
 		private function initPage():void
 		{
+			var bmp:Bitmap;
+			var texture:Texture;
 			
-			cachedImagesLeft = new CachedImages(CachedImages.LEFT, textures);
-			cachedImagesRight = new CachedImages(CachedImages.RIGHT, textures);
+			ShadowUtil.addShadowsToBMPs(bmps, bookWidth, bookHeight);
+			textures = new Vector.<Texture>();
+			for each(bmp in bmps) {
+				texture = Texture.fromBitmap(bmp);	
+				textures.push(texture);
+			}
+			
+			cachedImagesLeft = new CachedImages(CachedImages.LEFT, textures, bmps);
+			cachedImagesRight = new CachedImages(CachedImages.RIGHT, textures, bmps);
 			cachedImagesRight.x = bookWidth/2;
 			
 			addChild(cachedImagesLeft);
 			addChild(cachedImagesRight);
+			
+			
 			
 			flipImage = new PageFlipImage(textures[0], debugGraphics);
 			addEventListener(Event.ENTER_FRAME,enterFrameHandler);
@@ -104,6 +108,7 @@ package book.pf
 			cachedImagesLeft.addEventListener(Event.CHANGE, cachedImageChanged);
 			cachedImagesRight.addEventListener(Event.CHANGE, cachedImageChanged);
 		}
+		
 		
 		private function firstFrameInit():void
 		{
@@ -131,21 +136,6 @@ package book.pf
 				rightPageNum = flipingPageNum + 2;
 			}
 			
-			/*
-			if(validatePageNumber(leftPageNum))
-			{
-				cachedImagesLeft.showImage(leftPageNum);
-			} else {
-				cachedImagesLeft.nullify();
-			}
-			
-			if(validatePageNumber(rightPageNum))
-			{
-				cachedImagesRight.showImage(rightPageNum);
-			}  else {
-				cachedImagesRight.nullify();
-			}
-			*/
 			
 			if(validatePageNumber(flipingPageNum))
 			{
@@ -158,8 +148,7 @@ package book.pf
 					} else {
 						softContainer.resetQuads();
 					}
-					
-					//setChildIndex(softContainer, numChildren);
+				
 					flipImage.texture = begainPageLocationX>=0?textures[flipingPageNum]:textures[flipingPageNum+1];
 					flipImage.anotherTexture = begainPageLocationX<0?textures[flipingPageNum]:textures[flipingPageNum+1];
 					flipImage.readjustSize();
