@@ -26,6 +26,7 @@ package book.pf
 		
 		private var cachedImagesLeft:CachedImages;
 		private var cachedImagesRight:CachedImages;
+		private static var sHelperPoint:Point = new Point();
 		
 		private var flipImage:PageFlipImage;
 		
@@ -105,11 +106,21 @@ package book.pf
 			addEventListener(Event.ADDED_TO_STAGE,firstFrameInit);
 			addEventListener(TouchEvent.TOUCH,onTouchHandler);
 			
-			cachedImagesLeft.addEventListener(Event.CHANGE, cachedImageChanged);
-			cachedImagesRight.addEventListener(Event.CHANGE, cachedImageChanged);
 		}
 		
-		
+		private function disposeSoftContainer() {
+			if(softContainer != null) {
+				softContainer.dispose();
+				removeChild(softContainer);
+				softContainer = null;
+			}
+			
+			if(flipImage != null) {
+				if(contains(flipImage)) {
+					removeChild(flipImage);
+				}
+			}
+		}
 		private function firstFrameInit():void
 		{
 			
@@ -169,11 +180,7 @@ package book.pf
 				
 				
 			} else {
-				if(softContainer != null) {
-					softContainer.dispose();
-					removeChild(softContainer);
-					softContainer = null;
-				}
+				disposeSoftContainer();
 			}
 		}
 		
@@ -182,45 +189,56 @@ package book.pf
 		private function onTouchHandler(event:TouchEvent):void
 		{
 			var touch:Touch = event.getTouch(this);
+			var imgWidth:Number = bookWidth/2;
+			var imgHeight:Number = bookHeight/2;
+			var touchOffset:Number;
+			var idx:int = -2;
 			if(touch != null && (touch.phase == TouchPhase.BEGAN || touch.phase == TouchPhase.MOVED || touch.phase == TouchPhase.ENDED))
 			{
-				var point:Point = touch.getLocation(this);
-				var imgWidth:Number = bookWidth/2;
-				var imgHeight:Number = bookHeight/2;
+				touch.getLocation(this, sHelperPoint);
+				
 				if(touch.phase == TouchPhase.BEGAN)
 				{
-					begainPageLocationX = (point.x-imgWidth)/imgWidth;
-					begainPageLocationY = (point.y-imgHeight)/imgHeight;
-					isDraging = true;
-					if(point.x >= imgWidth)
-					{
-						if(validatePageNumber(rightPageNum))
-						{
-							flipingPageNum = rightPageNum;
-						}
-					}
-					else
-					{
-						if(validatePageNumber(leftPageNum))
-						{
-							flipingPageNum = leftPageNum-1;
-						}
-					}
-					resetSoftMode();
-					if(flipImage.softMode && !flipImage.validateBegainPoint(begainPageLocationX,begainPageLocationY))
-					{
-						isDraging = false;
-						flipingPageNum = -1;
-						return;
+					begainPageLocationX = (sHelperPoint.x-imgWidth)/imgWidth;
+					begainPageLocationY = (sHelperPoint.y-imgHeight)/imgHeight;
+					touchOffset = (sHelperPoint.x - imgWidth);
+					
+					
+					
+					if(touchOffset > 0 && ((touchOffset - imgWidth) > 0)) {
+						idx = cachedImagesRight.currentIndex + ((Math.ceil((touchOffset - imgWidth) / CachedImages.TABSIZE))*2);
+					} else if(touchOffset < 0 && (Math.abs(touchOffset) - imgWidth) > 0) {
+						idx = (cachedImagesLeft.currentIndex - (Math.ceil((Math.abs(touchOffset) - imgWidth) / CachedImages.TABSIZE))*2);
 					}
 					
-				}
-				else if(touch.phase == TouchPhase.MOVED)
-				{
+					if(idx != -2 && idx >= 0 && idx < pageCount) {
+						gotoPage(idx);
+						dispatchEventWith(Event.CHANGE, false, idx);
+					} else {
+					
+						isDraging = true;
+						if(sHelperPoint.x >= imgWidth) {
+							if(validatePageNumber(rightPageNum)) {
+								flipingPageNum = rightPageNum;
+							}
+						} else {
+							if(validatePageNumber(leftPageNum)) {
+								flipingPageNum = leftPageNum-1;
+							}
+						}
+						resetSoftMode();
+						if(flipImage.softMode && !flipImage.validateBegainPoint(begainPageLocationX,begainPageLocationY)) {
+							isDraging = false;
+							flipingPageNum = -1;
+							return;
+						}
+					
+					}
+				} else if(touch.phase == TouchPhase.MOVED) {
 					if(isDraging)
 					{
-						flipingPageLocationX = (point.x-imgWidth)/imgWidth;
-						flipingPageLocationY = (point.y-imgHeight)/imgHeight;
+						flipingPageLocationX = (sHelperPoint.x-imgWidth)/imgWidth;
+						flipingPageLocationY = (sHelperPoint.y-imgHeight)/imgHeight;
 						if(flipingPageLocationX > 1)
 							flipingPageLocationX = 1;
 						if(flipingPageLocationX < -1)
@@ -236,7 +254,7 @@ package book.pf
 				{
 					if(isDraging)
 					{
-						finishTouchByMotion(point.x);
+						finishTouchByMotion(sHelperPoint.x);
 						isDraging = false;
 					}
 				}
@@ -276,7 +294,17 @@ package book.pf
 				targetPage--;
 			}
 			
-			dispatchEventWith(Event.CHANGE, false, targetPage);
+			if(targetPage < -1) {
+				targetPage = -1;
+			} else if(targetPage > pageCount-1) {
+				targetPage = pageCount-1;
+			}
+			targetPage++;
+			
+			if(Math.abs(targetPage-flipingPageNum) <= 1) {
+				//trace("DISPATCHING FROM MOTION", targetPage, flipingPageNum);
+				dispatchEventWith(Event.CHANGE, false, targetPage);
+			}
 			
 			addEventListener(Event.ENTER_FRAME,executeMotion);
 			function executeMotion(event:Event):void
@@ -331,13 +359,12 @@ package book.pf
 			validateNow();
 			touchable = true;
 			debugGraphics.clear();
+			disposeSoftContainer();
+			
 			
 		}
 		
-		private function redrawCachedPages() {
-			cachedImagesLeft.showImage(leftPageNum);
-			cachedImagesRight.showImage(rightPageNum);
-		}
+		
 		
 		private function validatePageNumber(pageNum:int):Boolean
 		{
@@ -359,28 +386,16 @@ package book.pf
 		{
 			
 			needUpdate = true;
-			redrawCachedPages();
+			cachedImagesLeft.showImage(leftPageNum);
+			cachedImagesRight.showImage(rightPageNum);
 			enterFrameHandler();
 			needUpdate = false;
 			
 		}
 		
-		private function cachedImageChanged(evt:Event) {
-			var idx:int = evt.data as int;
-			
-			gotoPage(idx);
-			
-			dispatchEventWith(Event.CHANGE, false, idx-1);
-		}
 		
 		public function gotoPage(pn:int):void
 		{	
-			
-			
-			if(contains(flipImage)) {
-				removeChild(flipImage);
-			}
-			
 			
 			if(!pn) {
 				leftPageNum = -1;

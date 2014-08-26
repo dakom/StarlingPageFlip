@@ -18,7 +18,15 @@ package book.pf
 		}
 		
 		override public function dispose():void {
+			var qb:QuadBatch;
+			
+			for each(qb in quads) {
+				qb.reset();
+				qb = null;
+			}
+			
 			quads = null;
+			
 			super.dispose();
 		}
 		

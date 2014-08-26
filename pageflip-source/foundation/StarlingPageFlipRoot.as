@@ -113,8 +113,8 @@ package foundation
 		}
 		
 		private function bookChanged(evt:Event) {
-			var newPageNum:int = evt.data as int;
-			navigationContainer.setCurrentIndex(newPageNum+1, false);
+			var newPageNum:int = (evt.data as int);
+			navigationContainer.setCurrentIndex(newPageNum, false);
 		}
 		
 		private function navigationChanged(evt:Event) {

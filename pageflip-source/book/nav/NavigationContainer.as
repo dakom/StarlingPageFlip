@@ -193,6 +193,8 @@ package book.nav
 		public function setCurrentIndex(targetIndex:uint, dispatchAfter:Boolean = true) {
 			var circle:Shape;
 			
+			
+			
 			if(_currentIndex >= 0) {
 				circle = circles[_currentIndex];
 				drawCircle(circle, circleSize, buttonLineColor, -1);
