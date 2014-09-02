@@ -18,17 +18,16 @@ package book.pf
 	public class PageFlipImage extends Image
 	{
 		
-		public const BOOK_WIDTH:Number = 800;
-		public const BOOK_HEIGHT:Number = 480;
 		
+		public var LEFT_UP_POINT:Point;
+		public var LEFT_BOTTOM_POINT:Point;
+		public var RIGHT_UP_POINT:Point;
+		public var RIGHT_BOTTOM_POINT:Point;
+		public var MID_UP_POINT:Point;
+		public var MID_BOTTOM_POINT:Point;
 		
-		public const LEFT_UP_POINT:Point      = new Point(0 , 0);
-		public const LEFT_BOTTOM_POINT:Point  = new Point(0 , BOOK_HEIGHT);
-		public const RIGHT_UP_POINT:Point     = new Point(BOOK_WIDTH , 0);
-		public const RIGHT_BOTTOM_POINT:Point = new Point(BOOK_WIDTH , BOOK_HEIGHT);
-		public const MID_UP_POINT:Point       = new Point(BOOK_WIDTH/2 , 0);
-		public const MID_BOTTOM_POINT:Point   = new Point(BOOK_WIDTH/2 , BOOK_HEIGHT);
-		
+		private var bookWidth:Number;
+		private var bookHeight:Number;
 		
 		private var _dragPoint:Point = new Point();
 		private var _dragPointCopy:Point = new Point();
@@ -50,8 +49,8 @@ package book.pf
 		/**@private*/
 		private var limitedPoint:Point = new Point();
 		private var limitedPointCopy:Point = new Point();
-		private const radius:Number = BOOK_WIDTH/2;
-		private const radiusCopy:Number = Math.sqrt(Math.pow(BOOK_HEIGHT,2) + Math.pow(BOOK_WIDTH/2,2));
+		private var radius:Number;
+		private var radiusCopy:Number;
 		
 		
 		public var softMode:Boolean;
@@ -63,11 +62,24 @@ package book.pf
 		private var debugGraphics:starling.display.Graphics;
 		
 		/**@private*/
-		public function PageFlipImage(texture:Texture, _debugGraphics:starling.display.Graphics)
+		public function PageFlipImage(texture:Texture, _debugGraphics:starling.display.Graphics, _bookWidth:Number, _bookHeight:Number)
 		{
 			super(texture);
 			
 			debugGraphics = _debugGraphics;
+			
+			bookWidth = _bookWidth;
+			bookHeight = _bookHeight;
+			
+			LEFT_UP_POINT      = new Point(0 , 0);
+			LEFT_BOTTOM_POINT  = new Point(0 , bookHeight);
+			RIGHT_UP_POINT     = new Point(bookWidth , 0);
+			RIGHT_BOTTOM_POINT = new Point(bookWidth , bookHeight);
+			MID_UP_POINT       = new Point(bookWidth/2 , 0);
+			MID_BOTTOM_POINT   = new Point(bookWidth/2 , bookHeight);
+			
+			radius = bookWidth/2;
+			radiusCopy = Math.sqrt(Math.pow(bookHeight,2) + Math.pow(bookWidth/2,2));
 		}
 		/**@override*/
 		override public function readjustSize():void
@@ -91,8 +103,8 @@ package book.pf
 		public function setLocation(flipingPageLocation:Number):void
 		{
 			var fpl:Number = Math.abs(flipingPageLocation);
-			var w:Number = BOOK_WIDTH/2;
-			var h:Number = BOOK_HEIGHT;
+			var w:Number = bookWidth/2;
+			var h:Number = bookHeight;
 			var topOffset:Number = h/8;
 			if(flipingPageLocation>=0)
 			{
@@ -117,14 +129,14 @@ package book.pf
 			var by:Number = begainPageLocationY;
 			var fx:Number = flipingPageLocationX;
 			var fy:Number = flipingPageLocationY;
-			var w:Number = BOOK_WIDTH/2;
-			var h:Number = BOOK_HEIGHT;
+			var w:Number = bookWidth/2;
+			var h:Number = bookHeight;
 			
 			if(validateBegainPoint(bx,by))
 			{
 				
 				currentHotType = getBegainPointType(bx, by);
-				var mouseLocation:Point = new Point(BOOK_WIDTH/2+fx*BOOK_WIDTH/2,BOOK_HEIGHT/2+fy*BOOK_HEIGHT/2);
+				var mouseLocation:Point = new Point(bookWidth/2+fx*bookWidth/2,bookHeight/2+fy*bookHeight/2);
 				_dragPoint.x = mouseLocation.x;
 				_dragPoint.y = mouseLocation.y;
 				onTurnPageByHand(mouseLocation);
@@ -240,7 +252,7 @@ package book.pf
 		
 		private function onTurnPageByHand(mouseLocation:Point):void
 		{
-			if(mouseLocation.x >= 0 && mouseLocation.x <= BOOK_WIDTH)
+			if(mouseLocation.x >= 0 && mouseLocation.x <= bookWidth)
 			{
 				_dragPoint.x += (mouseLocation.x - _dragPoint.x)*0.4;
 				_dragPoint.y += (mouseLocation.y - _dragPoint.y)*0.4;
@@ -250,14 +262,14 @@ package book.pf
 				switch(currentHotType)
 				{
 					case(PageVerticeType.TOP_LEFT):
-						if(mouseLocation.x > BOOK_WIDTH)
+						if(mouseLocation.x > bookWidth)
 						{
 							_dragPoint.x += (targetPoint.x - _dragPoint.x)*0.5;
 							_dragPoint.y += (targetPoint.y - _dragPoint.y)*0.5;
 						}
 						break;
 					case(PageVerticeType.BOTTOM_LEFT):
-						if(mouseLocation.x > BOOK_WIDTH)
+						if(mouseLocation.x > bookWidth)
 						{
 							_dragPoint.x += (targetPoint.x - _dragPoint.x)*0.5;
 							_dragPoint.y += (targetPoint.y - _dragPoint.y)*0.5;
@@ -288,18 +300,18 @@ package book.pf
 		/**用来限制_dragPoint的活动范围，从而达到翻书时最大和最小可能效果*/
 		private function limitationCalculator(_dragPoint:Point):void
 		{
-			if(_dragPoint.y > BOOK_HEIGHT-0.1)
-				_dragPoint.y = BOOK_HEIGHT-0.1;
+			if(_dragPoint.y > bookHeight-0.1)
+				_dragPoint.y = bookHeight-0.1;
 			if(_dragPoint.x <= 0.1)
 				_dragPoint.x = 0.1;
-			if(_dragPoint.x > BOOK_WIDTH-0.1)
-				_dragPoint.x = BOOK_WIDTH-0.1;
-			_dragPoint.x -= BOOK_WIDTH/2;
-			_dragPoint.y -= BOOK_HEIGHT/2;
-			limitedPoint.x -= BOOK_WIDTH/2;
-			limitedPoint.y -= BOOK_HEIGHT/2;
-			limitedPointCopy.x -= BOOK_WIDTH/2;
-			limitedPointCopy.y -= BOOK_HEIGHT/2;
+			if(_dragPoint.x > bookWidth-0.1)
+				_dragPoint.x = bookWidth-0.1;
+			_dragPoint.x -= bookWidth/2;
+			_dragPoint.y -= bookHeight/2;
+			limitedPoint.x -= bookWidth/2;
+			limitedPoint.y -= bookHeight/2;
+			limitedPointCopy.x -= bookWidth/2;
+			limitedPointCopy.y -= bookHeight/2;
 			if(currentHotType == PageVerticeType.TOP_LEFT || currentHotType == PageVerticeType.TOP_RIGHT)
 			{
 				if(_dragPoint.y >= Math.sqrt(Math.pow(radius,2)-Math.pow(_dragPoint.x,2))+limitedPoint.y)
@@ -322,12 +334,12 @@ package book.pf
 					_dragPoint.y = Math.sqrt(Math.pow(radiusCopy,2)-Math.pow(_dragPoint.x,2))+limitedPointCopy.y;
 				}
 			}
-			_dragPoint.x += BOOK_WIDTH/2;
-			_dragPoint.y += BOOK_HEIGHT/2;
-			limitedPoint.x += BOOK_WIDTH/2;
-			limitedPoint.y += BOOK_HEIGHT/2;
-			limitedPointCopy.x += BOOK_WIDTH/2;
-			limitedPointCopy.y += BOOK_HEIGHT/2;
+			_dragPoint.x += bookWidth/2;
+			_dragPoint.y += bookHeight/2;
+			limitedPoint.x += bookWidth/2;
+			limitedPoint.y += bookHeight/2;
+			limitedPointCopy.x += bookWidth/2;
+			limitedPointCopy.y += bookHeight/2;
 		}
 		/**计算一系列数学系数*/
 		private function mathematicsCalculator(_dragPoint:Point):void

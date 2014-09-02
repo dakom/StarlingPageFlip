@@ -101,7 +101,7 @@ package book.pf
 			
 			
 			
-			flipImage = new PageFlipImage(textures[0], debugGraphics);
+			flipImage = new PageFlipImage(textures[0], debugGraphics, bookWidth, bookHeight);
 			addEventListener(Event.ENTER_FRAME,enterFrameHandler);
 			addEventListener(Event.ADDED_TO_STAGE,firstFrameInit);
 			addEventListener(TouchEvent.TOUCH,onTouchHandler);
