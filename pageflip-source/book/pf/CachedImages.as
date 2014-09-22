@@ -71,6 +71,23 @@ package book.pf
 			//this.touchable = false;
 		}
 		
+		public static function disposeStatic():void {
+			var img:Image;
+			
+			for each(img in shadows) {
+				img.texture.dispose();
+				img.dispose();
+			}
+			
+			for each(img in shadows) {
+				//textures are disposed externally, this should only be called when entire page needs disposing
+				img.dispose();
+			}
+			
+			imgs = null;
+			shadows = null;
+		
+		}
 	
 		//Don't remember why the sizes works out like this... but it does :)
 		private function makeShadow(shadowDirection:String, bmp:Bitmap, _idx:uint):Image {

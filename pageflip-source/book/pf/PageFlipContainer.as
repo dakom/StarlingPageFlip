@@ -80,6 +80,20 @@ package book.pf
 			initPage();
 		}
 		
+		override public function dispose():void {
+			var texture:Texture;
+			
+			disposeSoftContainer();
+			
+			for each(texture in textures) {
+				texture.dispose();
+			}
+			
+			CachedImages.disposeStatic();
+			
+			super.dispose();
+		}
+		
 		private function initPage():void
 		{
 			var bmp:Bitmap;
