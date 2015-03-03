@@ -10,6 +10,12 @@ Clicking/Touching on 20% of edge causes to flip, as does using navigation. Click
 Note that it's using use-network=false and expects therefore to open locally via file://, not via server
 Runtime images are in assets/runtime (not bin-release)
 
+**FEATURES:**
+
+Besides the basic flip capability, this dynamically adds internal shadows to sell the realism and plays nice with transparency (see rounded corners)
+
+Also, the demo deals with scaling issues gracefully, though that's more of a general project issue than pageflip-specific.
+
 **REQUIREMENTS TO COMPILE:**
 
 1. Greensock (swc is here in lib folder)
