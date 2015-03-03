@@ -25,11 +25,11 @@ package foundation
 	{	
 		
 		// Startup image for SD screens
-		[Embed(source="../../assets/compiletime/BG_SD.png")]
+		[Embed(source="../../assets/compiletime/BG_SD.jpg")]
 		private static var Background:Class;
 		
 		// Startup image for HD screens
-		[Embed(source="../../assets/compiletime/BG_HD.png")]
+		[Embed(source="../../assets/compiletime/BG_HD.jpg")]
 		private static var BackgroundHD:Class;
 		
 		private var viewPort:Rectangle;
@@ -183,23 +183,34 @@ package foundation
 				flashBackground.bitmapData.dispose();
 			}
 			
-			
-			
-			
 			mat.createGradientBox(stage.stageWidth, stage.stageHeight);
-			flashBGShape.graphics.beginGradientFill(GradientType.RADIAL, [0x20241a, 0x0], [1,1],[0,255], mat);
+			flashBGShape.graphics.beginGradientFill(GradientType.RADIAL, [0x2a2a2a, 0x0], [1,1],[0,255], mat);
 			flashBGShape.graphics.drawRect(0,0,stage.stageWidth, stage.stageHeight);
 			flashBGShape.graphics.endFill();
 			
+			bmd = new BitmapData(stage.stageWidth, stage.stageHeight, true);
+			bmd.draw(flashBGShape);
+			bmd.fillRect(viewPort, 0);
+			flashBackground = new Bitmap(bmd);
+			stage.addChild(flashBackground);
 			
+			//Just for testing complicated flash backgrounds....
+			/*
+			
+			if(flashBackground != null) {
+				stage.removeChild(flashBackground);
+				flashBackground.bitmapData.dispose();
+			}
 			
 			bmd = new BitmapData(stage.stageWidth, stage.stageHeight, true);
 			bmd.perlinNoise(1000, 1000, 3, 50, true, true, 7, false);
 			bmd.fillRect(viewPort, 0);
 			
 			flashBackground = new Bitmap(bmd);
-			
 			stage.addChild(flashBackground);
+			*/
+			
+			
 		}
 	}
 }

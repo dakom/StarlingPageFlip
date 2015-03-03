@@ -11,7 +11,8 @@ package foundation
 	import flash.display.Bitmap;
 	
 	import book.nav.NavigationContainer;
-	
+	import book.page.Page;
+	import book.page.PageManager;
 	import book.pf.PageFlipContainer;
 	import book.pf.ShadowUtil;
 	
@@ -31,7 +32,7 @@ package foundation
 		private var loaderMax:LoaderMax;
 		
 		
-		private var pageFlipContainer:PageFlipContainer;
+		private var pageManager:PageManager;
 		private var navigationContainer:NavigationContainer;
 		
 		private var images:Array = [	'StartCover_Front',
@@ -100,27 +101,42 @@ package foundation
 			}
 			
 			
-			pageFlipContainer = new PageFlipContainer(bmps,bookWidth, bookHeight);
-			pageFlipContainer.addEventListener(Event.CHANGE, bookChanged);
-			pageFlipContainer.x = ((Constants.DESIGN_WIDTH - bookWidth)/2);
-			pageFlipContainer.y = 100;
-			addChild(pageFlipContainer);
+			pageManager = new PageManager(bmps);
+			addChild(pageManager);
+			pageManager.x = ((Constants.DESIGN_WIDTH - 400)/2) + 200;
+			pageManager.y = 300;
+			pageManager.addEventListener(Event.CHANGE, pageManagerChanged);
+			pageManager.addEventListener(Event.OPEN, pageManagerSelected);
 			
-			
-			navigationContainer = new NavigationContainer(bmps.length, bookWidth, bookHeight);
+			navigationContainer = new NavigationContainer(bmps.length, Constants.DESIGN_WIDTH, Constants.DESIGN_HEIGHT);
 			navigationContainer.addEventListener(Event.CHANGE, navigationChanged);
+			navigationContainer.x = ((Constants.DESIGN_WIDTH - navigationContainer.width)/2);
+			navigationContainer.y = 710;
 			addChild(navigationContainer);
+			
+			
+			navigationContainer.setCurrentIndex(0, false);
 		}
 		
-		private function bookChanged(evt:Event) {
+		private function pageManagerChanged(evt:Event) {
 			var newPageNum:int = (evt.data as int);
+			
 			navigationContainer.setCurrentIndex(newPageNum, false);
 		}
 		
 		private function navigationChanged(evt:Event) {
-			var newPageNum:int = evt.data as int;
+			var newPageNum:int = (evt.data as int);
+			pageManager.gotoPage(newPageNum);
 			
-			pageFlipContainer.gotoPage(newPageNum);
+		}
+		
+		private function pageManagerSelected(evt:Event) {
+			var pageIndex:uint = evt.data.pageIndex;
+			var side:String = evt.data.side;
+			var finalDecision:uint = (side == Page.BACK) ? pageIndex+1 : pageIndex;
+			
+			
+			trace("PAGE MANAGER:", pageIndex, "NAV:", navigationContainer.currentIndex, "SIDE:", side, "FINAL:", finalDecision);
 		}
 		
 	}
