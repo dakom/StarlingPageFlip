@@ -5,6 +5,8 @@ StarlingPageFlip
 
 Just open the html file in bin-release folder via your browser
 
+Clicking/Touching on 20% of edge causes to flip, as does using navigation. Clicking in middle dispatches an event than can be used to do something with that page.
+
 Note that it's using use-network=false and expects therefore to open locally via file://, not via server
 Runtime images are in assets/runtime (not bin-release)
 
