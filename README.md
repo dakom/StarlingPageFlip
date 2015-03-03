@@ -31,4 +31,4 @@ Also, make sure you include the "pageflip-source" folder into the build. It's se
 
 **TO-DO - FEATURES (could _really_) use some help here!:**
 
-1. Make flexible/bendy pages
+1. Make flexible/bendy pages (maybe by integrating NeoGuo's base as a paper type? - but needs to work with sides and top corners)
